@@ -1,10 +1,12 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
-    namespace = "fr.droidfactory.cosmo.sdk.designsystem"
+    namespace = "fr.droidfactory.cosmo.ui.products"
 
     defaultConfig {
 
@@ -18,10 +20,15 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
+    kapt {
+        correctErrorTypes = true
+    }
+
 }
 
 dependencies {
 
+    implementation(project(":sdk-designsystem"))
     implementation(libs.androidx.core.ktx)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
@@ -30,6 +37,9 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.compose.navigation)
 
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.compose.navigation)
+    kapt(libs.hilt.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

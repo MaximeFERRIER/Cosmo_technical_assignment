@@ -7,7 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import fr.droidfactory.sdk.designsystem.theme.CosmoTheme
+import fr.droidfactory.cosmo.sdk.designsystem.theme.CosmoTheme
+import fr.droidfactory.cosmo.ui.products.ProductNavigation
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,7 +20,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
+                    ProductNavigation()
                 }
             }
         }

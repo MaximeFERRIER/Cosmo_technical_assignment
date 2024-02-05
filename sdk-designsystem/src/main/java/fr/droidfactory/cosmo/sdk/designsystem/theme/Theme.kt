@@ -1,4 +1,4 @@
-package fr.droidfactory.sdk.designsystem.theme
+package fr.droidfactory.cosmo.sdk.designsystem.theme
 
 import android.app.Activity
 import android.os.Build

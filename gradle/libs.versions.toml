@@ -69,4 +69,5 @@ coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coi
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
+hilt-plugin = { id = "com.google.dagger.hilt.android", version.ref = "hilt-version" }
 

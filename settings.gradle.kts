@@ -22,5 +22,6 @@ dependencyResolutionManagement {
 rootProject.name = "Cosmo"
 include(
     ":app",
-    ":sdk-designsystem"
-    )
+    ":sdk-designsystem",
+    ":ui-products"
+)
