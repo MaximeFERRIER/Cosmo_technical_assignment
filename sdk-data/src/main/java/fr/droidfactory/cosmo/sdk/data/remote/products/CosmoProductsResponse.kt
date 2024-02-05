@@ -16,11 +16,11 @@ data class CosmoProductsResponse(
         @SerialName("firmwareVersion")
         val firmwareVersion: String,
         @SerialName("installationMode")
-        val installationMode: String,
+        val installationMode: String? = null,
         @SerialName("lightAuto")
         val lightAuto: Boolean,
         @SerialName("lightMode")
-        val lightMode: String,
+        val lightMode: String? = null,
         @SerialName("lightValue")
         val lightValue: Int,
         @SerialName("macAddress")
@@ -28,8 +28,8 @@ data class CosmoProductsResponse(
         @SerialName("model")
         val model: String,
         @SerialName("product")
-        val product: String,
+        val product: String? = null,
         @SerialName("serial")
-        val serial: String
+        val serial: String? = null
     )
 }

@@ -1,0 +1,98 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "275e06f248fef73c041d3a6d133dba16",
+    "entities": [
+      {
+        "tableName": "PRODUCTS",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`mac_address` TEXT NOT NULL, `brakeLight` INTEGER NOT NULL, `firmware_version` TEXT NOT NULL, `installation_mode` TEXT, `light_auto` INTEGER NOT NULL, `light_mode` TEXT, `light_value` INTEGER NOT NULL, `model` TEXT NOT NULL, `product` TEXT, `serial` TEXT, PRIMARY KEY(`mac_address`))",
+        "fields": [
+          {
+            "fieldPath": "macAddress",
+            "columnName": "mac_address",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "brakeLight",
+            "columnName": "brakeLight",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firmwareVersion",
+            "columnName": "firmware_version",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "installationMode",
+            "columnName": "installation_mode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lightAuto",
+            "columnName": "light_auto",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lightMode",
+            "columnName": "light_mode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lightValue",
+            "columnName": "light_value",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "model",
+            "columnName": "model",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "product",
+            "columnName": "product",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "serial",
+            "columnName": "serial",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "mac_address"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_PRODUCTS_mac_address",
+            "unique": false,
+            "columnNames": [
+              "mac_address"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_PRODUCTS_mac_address` ON `${TABLE_NAME}` (`mac_address`)"
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '275e06f248fef73c041d3a6d133dba16')"
+    ]
+  }
+}

@@ -11,6 +11,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import fr.droidfactory.cosmo.sdk.data.BuildConfig
 import fr.droidfactory.cosmo.sdk.data.database.CosmoDatabase
+import fr.droidfactory.cosmo.sdk.data.database.daos.ProductsDao
+import fr.droidfactory.cosmo.sdk.data.database.migrations.Migration1To2
 import fr.droidfactory.cosmo.sdk.data.remote.products.ProductsDataStore
 import fr.droidfactory.cosmo.sdk.data.remote.products.ProductsDataStoreImpl
 import fr.droidfactory.cosmo.sdk.data.remote.products.ProductsLocalStore
@@ -70,8 +72,15 @@ internal abstract class DataModule {
                 context = context,
                 klass = CosmoDatabase::class.java,
                 name = CosmoDatabase.DATABASE_NAME
-            ).build()
+            )
+                .addMigrations(Migration1To2())
+                .build()
         }
+
+        @Provides
+        fun provideProductDao(
+            db: CosmoDatabase
+        ): ProductsDao = db.productsDao()
     }
 
 }

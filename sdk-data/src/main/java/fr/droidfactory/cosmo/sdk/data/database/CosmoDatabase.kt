@@ -9,7 +9,7 @@ import fr.droidfactory.cosmo.sdk.data.database.entities.ProductEntity
     entities = [
         ProductEntity::class
     ],
-    version = 1
+    version = 2
 )
 internal abstract class CosmoDatabase: RoomDatabase() {
     abstract fun productsDao(): ProductsDao

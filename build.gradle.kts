@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.androidLibrary) apply false
     alias(libs.plugins.hilt.plugin) apply false
     alias(libs.plugins.ksp.plugin) apply false
-    kotlin("plugin.serialization") version "1.9.21"
+    kotlin("plugin.serialization") version "1.9.0"
 }
 
 subprojects {

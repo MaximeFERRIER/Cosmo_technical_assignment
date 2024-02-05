@@ -11,8 +11,12 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 internal interface ProductsDao {
+
+    @Query("SELECT * FROM PRODUCTS")
+    suspend fun getAllProducts(): List<ProductEntity>
+
     @Query("SELECT * FROM PRODUCTS WHERE mac_address LIKE :macAddress")
-    fun getProductByMacAddress(macAddress: String): ProductEntity
+    suspend fun getProductByMacAddress(macAddress: String): ProductEntity
 
     @Query("SELECT * FROM PRODUCTS")
     fun observeProducts(): Flow<List<ProductEntity>>

@@ -6,11 +6,11 @@ data class Product(
     val brakeLight: Boolean,
     val firmwareVersion: String,
     val lightAuto: Boolean,
-    val lightMode: String,
-    val installationMode: String,
+    val lightMode: String?,
+    val installationMode: String?,
     val lightValue: Int,
-    val product: String,
-    val serial: String
+    val product: String?,
+    val serial: String?
 ) {
     enum class MODEL {
         RIDE,
