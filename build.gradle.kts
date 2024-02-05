@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
     alias(libs.plugins.androidLibrary) apply false
     alias(libs.plugins.hilt.plugin) apply false
+    alias(libs.plugins.ksp.plugin) apply false
+    kotlin("plugin.serialization") version "1.9.21"
 }
 
 subprojects {

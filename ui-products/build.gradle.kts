@@ -28,7 +28,9 @@ android {
 
 dependencies {
 
+    implementation(project(":sdk-core"))
     implementation(project(":sdk-designsystem"))
+    implementation(project(":sdk-domain"))
     implementation(libs.androidx.core.ktx)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)

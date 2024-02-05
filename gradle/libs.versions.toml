@@ -18,6 +18,7 @@ coil-version = "2.5.0"
 
 retrofit-version = "2.9.0"
 okhttp-version = "4.12.0"
+converter-version = "1.0.0"
 
 room-version = "2.6.1"
 ksp-version = "1.9.0-1.0.13"
@@ -26,6 +27,8 @@ coroutines-core-version = "1.7.3"
 leakcanary-version = "2.10"
 
 mockito-version = "5.9.0"
+
+kotlin-serialization-version = "1.6.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -53,6 +56,7 @@ mockito = { group = "org.mockito", name = "mockito-core", version.ref = "mockito
 
 kotlin-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines-core-version" }
 kotlin-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines-core-version" }
+kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-serialization-version" }
 
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room-version" }
 room-coroutine = { group = "androidx.room", name = "room-ktx", version.ref = "room-version" }
@@ -60,6 +64,7 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit-version" }
 okhttp-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp-version" }
+converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "converter-version" }
 
 leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanary-version" }
 
@@ -70,4 +75,5 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 hilt-plugin = { id = "com.google.dagger.hilt.android", version.ref = "hilt-version" }
+ksp-plugin = { id= "com.google.devtools.ksp", version.ref = "ksp-version" }
 

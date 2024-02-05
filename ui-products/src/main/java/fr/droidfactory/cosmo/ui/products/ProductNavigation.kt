@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import fr.droidfactory.cosmo.sdk.designsystem.navigation.setComposable
+import fr.droidfactory.cosmo.ui.products.productlist.ProductListStateful
 
 @Composable
 fun ProductNavigation() {
@@ -11,7 +12,11 @@ fun ProductNavigation() {
 
     NavHost(navController = navController, startDestination = Screens.ProductsList.route) {
         setComposable(route = Screens.ProductsList.route) {
-
+            ProductListStateful(
+                navigateToProductDetails = {
+                    navController.navigate(Screens.ProductDetails.buildRoute(macaddress = it))
+                }
+            )
         }
     }
 }

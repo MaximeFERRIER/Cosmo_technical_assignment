@@ -7,9 +7,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import dagger.hilt.EntryPoint
+import dagger.hilt.android.AndroidEntryPoint
 import fr.droidfactory.cosmo.sdk.designsystem.theme.CosmoTheme
 import fr.droidfactory.cosmo.ui.products.ProductNavigation
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
