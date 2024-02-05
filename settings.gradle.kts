@@ -20,4 +20,7 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Cosmo"
-include(":app")
+include(
+    ":app",
+    ":sdk-designsystem"
+    )
