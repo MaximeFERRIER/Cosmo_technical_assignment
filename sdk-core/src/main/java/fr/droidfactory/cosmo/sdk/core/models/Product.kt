@@ -7,10 +7,15 @@ data class Product(
     val firmwareVersion: String,
     val lightAuto: Boolean,
     val lightMode: String,
+    val installationMode: String,
+    val lightValue: Int,
+    val product: String,
+    val serial: String
 ) {
     enum class MODEL {
         RIDE,
         VISION,
-        REMOTE
+        REMOTE,
+        UNKNOWN
     }
 }

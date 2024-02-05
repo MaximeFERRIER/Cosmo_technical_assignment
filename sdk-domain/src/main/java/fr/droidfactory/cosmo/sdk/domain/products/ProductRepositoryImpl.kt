@@ -1,7 +1,9 @@
 package fr.droidfactory.cosmo.sdk.domain.products
 
+import fr.droidfactory.cosmo.sdk.core.models.Product
 import fr.droidfactory.cosmo.sdk.data.remote.products.ProductsDataStore
 import fr.droidfactory.cosmo.sdk.data.remote.products.ProductsLocalStore
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 internal class ProductRepositoryImpl @Inject constructor(
@@ -15,5 +17,8 @@ internal class ProductRepositoryImpl @Inject constructor(
         )
         val products = requireNotNull(productsResponse.getOrNull())
         productsLocalStore.saveProducts(products)
+        return Result.success(Unit)
     }
+
+    override suspend fun observeProducts(): Flow<List<Product>> = productsLocalStore.observeProducts()
 }

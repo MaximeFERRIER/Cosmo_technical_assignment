@@ -1,12 +1,16 @@
 package fr.droidfactory.cosmo.sdk.data.di
 
+import android.content.Context
+import androidx.room.Room
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import fr.droidfactory.cosmo.sdk.data.BuildConfig
+import fr.droidfactory.cosmo.sdk.data.database.CosmoDatabase
 import fr.droidfactory.cosmo.sdk.data.remote.products.ProductsDataStore
 import fr.droidfactory.cosmo.sdk.data.remote.products.ProductsDataStoreImpl
 import fr.droidfactory.cosmo.sdk.data.remote.products.ProductsLocalStore
@@ -57,6 +61,17 @@ internal abstract class DataModule {
         fun provideProductsService(
             retrofit: Retrofit
         ): ProductsService = retrofit.create(ProductsService::class.java)
+
+        @Provides
+        fun provideCosmoDatabase(
+            @ApplicationContext context: Context
+        ): CosmoDatabase {
+            return Room.databaseBuilder(
+                context = context,
+                klass = CosmoDatabase::class.java,
+                name = CosmoDatabase.DATABASE_NAME
+            ).build()
+        }
     }
 
 }

@@ -1,10 +1,13 @@
 package fr.droidfactory.cosmo.sdk.data.database.entities
 
 import androidx.room.ColumnInfo
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+
+@Entity(tableName = "PRODUCTS")
 data class ProductEntity(
-    @PrimaryKey @ColumnInfo(name = "mac_address") override val _id: String,
+    @PrimaryKey @ColumnInfo(name = "mac_address") val macAddress: String,
     @ColumnInfo(name = "brakeLight") val brakeLight: Boolean,
     @ColumnInfo(name = "firmware_version") val firmwareVersion: String,
     @ColumnInfo(name = "installation_mode") val installationMode: String,
@@ -14,4 +17,4 @@ data class ProductEntity(
     @ColumnInfo(name = "model") val model: String,
     @ColumnInfo(name = "product") val product: String,
     @ColumnInfo(name = "serial") val serial: String
-): CosmoEntity
+)

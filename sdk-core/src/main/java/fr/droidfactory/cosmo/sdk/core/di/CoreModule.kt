@@ -14,8 +14,4 @@ internal object CoreModule {
     @Provides
     @Singleton
     fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
-
-    @Provides
-    @Singleton
-    fun provideDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
 }
