@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.LifecycleResumeEffect
+import androidx.lifecycle.compose.LifecycleStartEffect
 import fr.droidfactory.cosmo.sdk.designsystem.components.DsTopBar
 import fr.droidfactory.cosmo.ui.products.R
 import fr.droidfactory.cosmo.ui.products.discover.components.AskScreen
@@ -53,7 +53,8 @@ internal fun BluetoothDiscoverStateful(
                 permissions.replace(it.key, it.value)
             }
         }
-    val enableBluetoothLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
+    val enableBluetoothLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
 
     val state = viewModel.state.collectAsState()
     BluetoothDiscoverScreen(
@@ -65,16 +66,19 @@ internal fun BluetoothDiscoverStateful(
                 permissions.filterValues { !it }.keys.toTypedArray()
             )
 
-            BluetoothDiscoverActions.OnAskToTurnOnBluetoothClicked -> enableBluetoothLauncher.launch(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE))
+            BluetoothDiscoverActions.OnAskToTurnOnBluetoothClicked -> enableBluetoothLauncher.launch(
+                Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+            )
+
             BluetoothDiscoverActions.OnBackClicked -> onNavigationBack()
         }
     }
 
-
-    LifecycleResumeEffect {
+    LifecycleStartEffect {
         viewModel.launchObservers()
-        onPauseOrDispose { viewModel.killObservers() }
+        onStopOrDispose { viewModel.killObservers() }
     }
+
 }
 
 @Composable
@@ -121,7 +125,7 @@ private fun BluetoothDiscoverScreen(
                     .fillMaxSize()
                     .padding(paddings),
                 contentAlignment = Alignment.Center
-            )  {
+            ) {
                 AskScreen(
                     modifier = Modifier
                         .fillMaxSize()

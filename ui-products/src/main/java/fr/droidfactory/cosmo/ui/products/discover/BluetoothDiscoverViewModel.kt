@@ -25,6 +25,7 @@ internal class BluetoothDiscoverViewModel @Inject constructor(
     internal val state = _state
 
     internal fun launchObservers() {
+        bluetoothController.registerReceivers()
         observeBluetoothState()
     }
 

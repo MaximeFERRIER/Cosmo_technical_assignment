@@ -8,7 +8,7 @@ interface BluetoothController {
     val pairedDevices: StateFlow<List<BluetoothDeviceFound>>
     val isBluetoothEnabled: StateFlow<Boolean>
 
-    fun enableBluetooth()
+    fun registerReceivers()
     fun startDiscovery()
     fun stopDiscovery()
     fun release()
