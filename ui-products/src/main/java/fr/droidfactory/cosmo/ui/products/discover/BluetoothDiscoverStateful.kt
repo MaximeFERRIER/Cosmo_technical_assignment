@@ -74,11 +74,6 @@ internal fun BluetoothDiscoverStateful(
         }
     }
 
-    LifecycleStartEffect {
-        viewModel.launchObservers()
-        onStopOrDispose { viewModel.killObservers() }
-    }
-
 }
 
 @Composable

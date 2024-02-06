@@ -36,7 +36,7 @@ internal class BluetoothControllerImpl @Inject constructor(
     }
 
     override fun startDiscovery() {
-        TODO("Not yet implemented")
+
     }
 
     override fun stopDiscovery() {
