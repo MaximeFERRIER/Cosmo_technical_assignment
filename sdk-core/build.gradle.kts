@@ -12,6 +12,14 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
+
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
+    }
+    
     kapt {
         correctErrorTypes = true
     }
@@ -20,6 +28,9 @@ android {
 dependencies {
 
     implementation(libs.androidx.core.ktx)
+
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.material3.window.size)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)

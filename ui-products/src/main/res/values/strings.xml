@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="loading_products_text">Please wait while your products are loading</string>
+    <string name="error_title">Oops, something wrong happened !</string>
+    <string name="retry_label">Retry</string>
+    <string name="product_title">Products</string>
 </resources>

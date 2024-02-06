@@ -57,6 +57,7 @@ android {
 dependencies {
 
     implementation(project(":sdk-designsystem"))
+    implementation(project(":sdk-core"))
     implementation(project(":ui-products"))
 
     implementation(libs.androidx.core.ktx)
@@ -67,6 +68,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.material3.window.size)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)

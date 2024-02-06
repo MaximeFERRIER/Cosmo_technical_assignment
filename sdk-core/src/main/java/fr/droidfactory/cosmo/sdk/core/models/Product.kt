@@ -6,7 +6,7 @@ data class Product(
     val brakeLight: Boolean,
     val firmwareVersion: String,
     val lightAuto: Boolean,
-    val lightMode: String?,
+    val lightMode: LIGHTMODE,
     val installationMode: String?,
     val lightValue: Int,
     val product: String?,
@@ -18,4 +18,21 @@ data class Product(
         REMOTE,
         UNKNOWN
     }
+
+    enum class LIGHTMODE {
+        OFF,
+        BOTH,
+        WARNING,
+        POSITION,
+        NONE
+    }
+
+    val productCompleteName: String
+        get() = buildString {
+            append(model.name)
+            product?.let {
+                append(" - ")
+                append(it)
+            }
+        }
 }
