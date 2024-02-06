@@ -22,9 +22,10 @@ dependencyResolutionManagement {
 rootProject.name = "Cosmo"
 include(
     ":app",
+    ":sdk-bluetooth",
     ":sdk-core",
+    ":sdk-data",
     ":sdk-designsystem",
     ":sdk-domain",
     ":ui-products"
 )
-include(":sdk-data")

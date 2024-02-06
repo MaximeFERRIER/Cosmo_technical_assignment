@@ -29,6 +29,7 @@ leakcanary-version = "2.10"
 mockito-version = "5.9.0"
 
 kotlin-serialization-version = "1.6.2"
+lifecycleRuntimeCompose = "2.7.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -72,6 +73,7 @@ converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-seri
 leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanary-version" }
 
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-version" }
+androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

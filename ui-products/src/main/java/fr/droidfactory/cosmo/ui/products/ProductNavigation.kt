@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import fr.droidfactory.cosmo.sdk.designsystem.navigation.setComposable
+import fr.droidfactory.cosmo.ui.products.discover.BluetoothDiscoverStateful
 import fr.droidfactory.cosmo.ui.products.productdetails.ProductDetailsStateful
 import fr.droidfactory.cosmo.ui.products.productlist.ProductListStateful
 
@@ -18,6 +19,8 @@ fun ProductNavigation() {
             ProductListStateful(
                 navigateToProductDetails = {
                     navController.navigate(Screens.ProductDetails.buildRoute(macaddress = it))
+                }, onNavigateToBluetoothDiscovery = {
+                    navController.navigate(Screens.BluetoothDiscover.route)
                 }
             )
         }
@@ -29,6 +32,14 @@ fun ProductNavigation() {
                 navController.popBackStack()
             })
         }
+
+        setComposable(route = Screens.BluetoothDiscover.route) {
+            BluetoothDiscoverStateful(
+                onNavigationBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
     }
 }
 
@@ -39,4 +50,5 @@ internal sealed class Screens(val route: String) {
         val routeWithArguments = "$route?$argumentMacAddress={$argumentMacAddress}"
         fun buildRoute(macaddress: String) = "$route?$argumentMacAddress=$macaddress"
     }
+    data object BluetoothDiscover: Screens("route_bluetooth_discover")
 }

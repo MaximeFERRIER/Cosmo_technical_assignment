@@ -1,5 +1,9 @@
 package fr.droidfactory.cosmo.ui.products.productlist
 
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,10 +29,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
-import fr.droidfactory.cosmo.sdk.core.CosmoExceptions
 import fr.droidfactory.cosmo.sdk.core.models.Product
 import fr.droidfactory.cosmo.sdk.core.ui.LocalWindowSizeProvider
 import fr.droidfactory.cosmo.sdk.core.ui.ResultState
@@ -51,14 +55,16 @@ private typealias ProductListActioner = (ProductListActions) -> Unit
 @Composable
 internal fun ProductListStateful(
     viewModel: ProductListViewModel = hiltViewModel(),
-    navigateToProductDetails: (String) -> Unit
+    navigateToProductDetails: (String) -> Unit,
+    onNavigateToBluetoothDiscovery: () -> Unit
 ) {
     val context = LocalContext.current
     val screenSize = LocalWindowSizeProvider.current.getScreenSize()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
-    val state = viewModel.productsState.collectAsState()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+    val canScanBluetoothDevices = context.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH) && context.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)
+    val state = viewModel.productsState.collectAsState()
     val sideEffect = remember {
         viewModel.sideEffect.flowWithLifecycle(lifecycle = lifecycle, minActiveState = Lifecycle.State.STARTED)
     }
@@ -78,12 +84,11 @@ internal fun ProductListStateful(
         is ResultState.Success -> ProductListScreen(
             products = (state.value as ResultState.Success<List<Product>>).data,
             snackbarHostState = snackbarHostState,
-            screenSize = screenSize
+            screenSize = screenSize,
+            canScanBluetoothDevices = canScanBluetoothDevices
         ) { action ->
             when (action) {
-                ProductListActions.OnFabClicked -> {
-
-                }
+                ProductListActions.OnFabClicked -> onNavigateToBluetoothDiscovery()
                 is ProductListActions.OnProductClicked -> navigateToProductDetails(action.productMacAddress)
                 ProductListActions.OnRefresh -> viewModel.getProductList()
             }
@@ -104,6 +109,7 @@ private fun ProductListScreen(
     products: List<Product>,
     screenSize: WindowSizeProvider.ScreenSize,
     snackbarHostState: SnackbarHostState,
+    canScanBluetoothDevices: Boolean,
     actioner: ProductListActioner
 ) {
 
@@ -122,8 +128,10 @@ private fun ProductListScreen(
                 title = stringResource(id = R.string.product_title)
             )
         }, floatingActionButton = {
-            DsFab.SecondaryFab(text = stringResource(id = R.string.discovery_title), icon = Icons.AutoMirrored.Default.BluetoothSearching) {
-                actioner(ProductListActions.OnFabClicked)
+            if(canScanBluetoothDevices) {
+                DsFab.SecondaryFab(text = stringResource(id = R.string.discovery_title), icon = Icons.AutoMirrored.Default.BluetoothSearching) {
+                    actioner(ProductListActions.OnFabClicked)
+                }
             }
         }, snackbarHost = {
             SnackbarHost(snackbarHostState) {

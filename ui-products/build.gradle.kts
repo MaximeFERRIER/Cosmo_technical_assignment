@@ -28,9 +28,11 @@ android {
 
 dependencies {
 
+    implementation(project(":sdk-bluetooth"))
     implementation(project(":sdk-core"))
     implementation(project(":sdk-designsystem"))
     implementation(project(":sdk-domain"))
+
     implementation(libs.androidx.core.ktx)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
@@ -43,6 +45,7 @@ dependencies {
 
     implementation(libs.hilt.android)
     implementation(libs.hilt.compose.navigation)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     kapt(libs.hilt.compiler)
 
     implementation(libs.coil.compose)

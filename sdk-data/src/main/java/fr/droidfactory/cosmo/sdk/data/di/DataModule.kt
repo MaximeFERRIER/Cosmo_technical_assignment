@@ -81,6 +81,8 @@ internal abstract class DataModule {
         fun provideProductDao(
             db: CosmoDatabase
         ): ProductsDao = db.productsDao()
+
+
     }
 
 }

@@ -29,7 +29,7 @@ internal class ProductDetailsViewModel @Inject constructor(
     private fun getProduct() {
         viewModelScope.launch {
             _product.update { ResultState.Loading }
-            getProductByMacAddressInteractor.execute(macAddress).onSuccess { product ->
+            getProductByMacAddressInteractor.invoke(macAddress).onSuccess { product ->
                 _product.update { ResultState.Success(product) }
             }.onFailure {  error ->
                 _product.update { ResultState.Failure(error) }
