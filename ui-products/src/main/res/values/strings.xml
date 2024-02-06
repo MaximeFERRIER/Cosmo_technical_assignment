@@ -6,4 +6,18 @@
     <string name="retry_label">Retry</string>
     <string name="product_title">Products</string>
     <string name="error_product_not_found">This product has not been found !</string>
+    <string name="description_title">Description</string>
+    <string name="about_title">About</string>
+
+    <string name="model">Model</string>
+    <string name="product">Product</string>
+    <string name="installation_mode">Installation mode</string>
+    <string name="light_value">Light Value</string>
+    <string name="lumen">%1$d lum</string>
+    <string name="mac_address">Mac address</string>
+    <string name="firmware_version">Firmware version</string>
+    <string name="light_mode">Light mode</string>
+    <string name="light_auto">Light auto</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

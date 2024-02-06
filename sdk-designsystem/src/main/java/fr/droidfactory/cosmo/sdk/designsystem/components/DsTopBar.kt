@@ -1,6 +1,10 @@
 package fr.droidfactory.cosmo.sdk.designsystem.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,11 +30,11 @@ object DsTopBar {
     ) = TopAppBarImpl(modifier = modifier, title = title)
 
     @Composable
-    fun NoNavigationActionNavBar(
+    fun NavigationTopBar(
         modifier: Modifier = Modifier,
         title: String,
-        actions: List<ActionButton>
-    ) = TopAppBarImpl(modifier = modifier, title = title, actions = actions)
+        onNavigationClick: () -> Unit
+    ) = TopAppBarImpl(modifier = modifier, title = title, onNavigationClick = onNavigationClick, navigationIcon = Icons.AutoMirrored.Filled.ArrowBack)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,7 +42,6 @@ object DsTopBar {
 private fun TopAppBarImpl(
     modifier: Modifier,
     title: String,
-    accessibilityDescription: String? = null,
     navigationIcon: ImageVector? = null,
     onNavigationClick: (() -> Unit)? = null,
     actions: List<ActionButton> = emptyList()
@@ -49,17 +52,18 @@ private fun TopAppBarImpl(
             containerColor = Color.Transparent
         ),
         title = {
-            Text(text = title, style = MaterialTheme.typography.titleLarge)
+            Text(text = title, style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onPrimary)
         },
         navigationIcon = {
-            if (navigationIcon != null && accessibilityDescription != null && onNavigationClick != null) {
+            if (navigationIcon != null && onNavigationClick != null) {
                 IconButton(
                     onClick = {
                         onNavigationClick()
                     }) {
                     Icon(
                         imageVector = navigationIcon,
-                        contentDescription = accessibilityDescription
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }
@@ -67,7 +71,7 @@ private fun TopAppBarImpl(
         actions = {
             actions.forEach {
                 IconButton(onClick = { it.onClick() }) {
-                    Icon(imageVector = it.icon, contentDescription = "")
+                    Icon(imageVector = it.icon, contentDescription = "", tint = MaterialTheme.colorScheme.onPrimary)
                 }
             }
         }

@@ -96,11 +96,11 @@ private fun ProductListScreen(
         }
     ) { paddings ->
 
-        /*Box(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(brush = Brush.verticalGradient(colors = listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary, MaterialTheme.colorScheme.tertiary)))
-        )*/
+        )
 
         LazyVerticalGrid(
             modifier = Modifier

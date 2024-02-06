@@ -31,11 +31,12 @@ object DsTexts {
     fun TitleMedium(
         modifier: Modifier = Modifier,
         title: String,
-        align: TextAlign = TextAlign.Start
+        align: TextAlign = TextAlign.Start,
+        color: Color = MaterialTheme.colorScheme.onBackground
     ) = DsTextsImpl(
         modifier = modifier,
         text = title,
-        color = MaterialTheme.colorScheme.onBackground,
+        color = color,
         style = MaterialTheme.typography.titleMedium,
         align = align,
         maxLines = 1

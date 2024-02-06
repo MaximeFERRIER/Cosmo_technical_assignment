@@ -1,15 +1,16 @@
 package fr.droidfactory.cosmo.sdk.core.models
 
 data class Product(
-    val macAddress: String,
     val model: MODEL,
+    val product: String?,
+    val installationMode: String?,
+    val lightValue: Int,
+
     val brakeLight: Boolean,
+    val macAddress: String,
     val firmwareVersion: String,
     val lightAuto: Boolean,
     val lightMode: LIGHTMODE,
-    val installationMode: String?,
-    val lightValue: Int,
-    val product: String?,
     val serial: String?
 ) {
     enum class MODEL {
