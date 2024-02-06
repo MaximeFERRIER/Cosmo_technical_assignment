@@ -1,10 +1,12 @@
 package fr.droidfactory.cosmo.ui.products
 
 import android.content.Context
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import fr.droidfactory.cosmo.sdk.core.CosmoExceptions
 import fr.droidfactory.cosmo.sdk.core.models.Product
 import fr.droidfactory.cosmo.sdk.designsystem.components.DsLightItem
 
@@ -57,3 +59,13 @@ internal fun Product.getProductAbout(context: Context): List<ItemInfo> {
 }
 
 private fun Boolean.toYesNo(context: Context) = if(this) context.getString(R.string.yes) else context.getString(R.string.no)
+
+internal fun Throwable.toErrorMessage(context: Context): String {
+    return when(this) {
+        is CosmoExceptions.GenericException -> "${context.getString(R.string.error_title)} $message"
+        CosmoExceptions.NoDataFound -> context.getString(R.string.error_title)
+        CosmoExceptions.NoNetworkException -> context.getString(R.string.error_offline)
+        CosmoExceptions.ServerException -> context.getString(R.string.error_api)
+        else -> context.getString(R.string.error_title)
+    }
+}

@@ -38,6 +38,8 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.compose.navigation)
+    implementation(libs.androidx.icons.core)
+    implementation(libs.androidx.icons.extended)
 
     implementation(libs.hilt.android)
     implementation(libs.hilt.compose.navigation)
