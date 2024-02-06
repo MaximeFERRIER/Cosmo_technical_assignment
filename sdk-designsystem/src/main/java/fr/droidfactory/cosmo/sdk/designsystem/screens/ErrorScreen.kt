@@ -2,14 +2,28 @@ package fr.droidfactory.cosmo.sdk.designsystem.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import fr.droidfactory.cosmo.sdk.designsystem.R
@@ -22,27 +36,52 @@ fun DsErrorScreen(
     subTitle: String,
     buttonText: String? = null,
     onButtonClick: (() -> Unit)? = null,
+    onCloseClicked: (() -> Unit)? = null
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.background),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(color = MaterialTheme.colorScheme.background)
+        .padding(WindowInsets.navigationBars.asPaddingValues())
     ) {
-        AsyncImage(model = R.drawable.ic_error, contentDescription = "")
+        onCloseClicked?.let {
+            IconButton(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .align(Alignment.TopStart),
+                onClick = {
+                    it()
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
+            }
+        }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                .align(Alignment.Center),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            AsyncImage(modifier = Modifier.size(100.dp), model = R.drawable.ic_error, contentDescription = "")
 
-        DsTexts.HeadlineLarge(title = title)
+            Spacer(modifier = Modifier.height(8.dp))
 
-        Spacer(modifier = Modifier.height(8.dp))
+            DsTexts.HeadlineLarge(title = title, align = TextAlign.Center, maxLines = 2)
 
-        DsTexts.HeadlineLarge(title = subTitle)
+            Spacer(modifier = Modifier.height(8.dp))
 
-        if (buttonText != null && onButtonClick != null) {
-            DsButton.ErrorButton(text = buttonText) {
-                onButtonClick()
+            DsTexts.BodyLarge(title = subTitle, align = TextAlign.Center, maxLines = 2)
+
+            if (buttonText != null && onButtonClick != null) {
+                DsButton.ErrorButton(text = buttonText) {
+                    onButtonClick()
+                }
             }
         }
     }

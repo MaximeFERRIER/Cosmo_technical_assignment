@@ -15,8 +15,8 @@ internal interface ProductsDao {
     @Query("SELECT * FROM PRODUCTS")
     suspend fun getAllProducts(): List<ProductEntity>
 
-    @Query("SELECT * FROM PRODUCTS WHERE mac_address LIKE :macAddress")
-    suspend fun getProductByMacAddress(macAddress: String): ProductEntity
+    @Query("SELECT * FROM PRODUCTS WHERE mac_address = :macAddress")
+    suspend fun getProductByMacAddress(macAddress: String): ProductEntity?
 
     @Query("SELECT * FROM PRODUCTS")
     fun observeProducts(): Flow<List<ProductEntity>>

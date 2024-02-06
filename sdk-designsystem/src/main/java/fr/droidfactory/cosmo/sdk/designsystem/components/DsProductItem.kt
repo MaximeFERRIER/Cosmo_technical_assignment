@@ -1,6 +1,5 @@
 package fr.droidfactory.cosmo.sdk.designsystem.components
 
-import android.graphics.Bitmap
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

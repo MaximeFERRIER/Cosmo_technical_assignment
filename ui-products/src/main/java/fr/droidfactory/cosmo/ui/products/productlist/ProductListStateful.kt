@@ -2,6 +2,8 @@ package fr.droidfactory.cosmo.ui.products.productlist
 
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -93,6 +96,12 @@ private fun ProductListScreen(
         }
     ) { paddings ->
 
+        /*Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(brush = Brush.verticalGradient(colors = listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary, MaterialTheme.colorScheme.tertiary)))
+        )*/
+
         LazyVerticalGrid(
             modifier = Modifier
                 .fillMaxSize()
@@ -101,10 +110,9 @@ private fun ProductListScreen(
         ) {
             items(items = products, key = { "${nbColumns}_${it.macAddress}"}) {
                 DsProductItem(title = it.productCompleteName, picture = it.model.getIllustration()) {
-
+                    actioner(ProductListActions.OnProductClicked(it.macAddress))
                 }
             }
         }
-
     }
 }

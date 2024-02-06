@@ -40,4 +40,8 @@ internal class ProductRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override suspend fun getProductByMacAddress(macAddress: String): Result<Product> {
+        return productsLocalStore.getProductByMacAddress(macAddress)
+    }
 }

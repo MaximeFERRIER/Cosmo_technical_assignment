@@ -5,7 +5,7 @@ import fr.droidfactory.cosmo.sdk.data.database.entities.ProductEntity
 import fr.droidfactory.cosmo.sdk.data.remote.products.CosmoProductsResponse
 
 internal fun List<ProductEntity>.toDomain(): List<Product> = this.map { it.toDomain() }
-private fun ProductEntity.toDomain(): Product = with(this) {
+internal fun ProductEntity.toDomain(): Product = with(this) {
     Product(
         macAddress = macAddress,
         model = Product.MODEL.entries.find { it.name == model } ?: Product.MODEL.UNKNOWN,

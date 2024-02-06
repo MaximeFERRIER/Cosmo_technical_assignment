@@ -1,9 +1,12 @@
 package fr.droidfactory.cosmo.ui.products
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import fr.droidfactory.cosmo.sdk.designsystem.navigation.setComposable
+import fr.droidfactory.cosmo.ui.products.productdetails.ProductDetailsStateful
 import fr.droidfactory.cosmo.ui.products.productlist.ProductListStateful
 
 @Composable
@@ -17,6 +20,14 @@ fun ProductNavigation() {
                     navController.navigate(Screens.ProductDetails.buildRoute(macaddress = it))
                 }
             )
+        }
+
+        setComposable(route = Screens.ProductDetails.routeWithArguments,
+            arguments = listOf(navArgument(Screens.ProductDetails.argumentMacAddress) { type = NavType.StringType })
+        ) {
+            ProductDetailsStateful(onNavigationBack = {
+                navController.popBackStack()
+            })
         }
     }
 }
