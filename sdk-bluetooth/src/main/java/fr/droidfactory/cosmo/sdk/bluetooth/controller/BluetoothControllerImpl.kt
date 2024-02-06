@@ -47,6 +47,6 @@ internal class BluetoothControllerImpl @Inject constructor(
     }
 
     override fun release() {
-        context.unregisterReceiver(stateReceiver)
+        //context.unregisterReceiver(stateReceiver)
     }
 }

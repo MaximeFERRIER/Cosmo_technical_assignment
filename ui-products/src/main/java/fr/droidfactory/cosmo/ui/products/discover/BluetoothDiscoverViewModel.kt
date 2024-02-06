@@ -20,8 +20,9 @@ internal class BluetoothDiscoverViewModel @Inject constructor(
 
     private var observeBluetoothEnabledJob: Job? = null
     private var _isBluetoothEnabled = MutableStateFlow(false)
-    internal val isBluetoothEnabled = _isBluetoothEnabled
 
+    private val _state = MutableStateFlow(BluetoothDiscoverDataStore())
+    internal val state = _state
 
     internal fun launchObservers() {
         observeBluetoothState()
@@ -41,6 +42,9 @@ internal class BluetoothDiscoverViewModel @Inject constructor(
             bluetoothController.release()
             observeBluetoothEnabledJob?.cancelAndJoin()
         }
-
     }
 }
+
+internal data class BluetoothDiscoverDataStore(
+    val isBluetoothEnabled: Boolean = false
+)
