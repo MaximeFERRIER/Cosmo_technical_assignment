@@ -39,7 +39,7 @@ internal fun AskScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            DsTexts.HeadlineMedium(title = text, align = TextAlign.Center)
+            DsTexts.HeadlineMedium(title = text, align = TextAlign.Center, maxLines = 2)
 
             Spacer(modifier = Modifier.height(16.dp))
 

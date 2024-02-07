@@ -40,10 +40,6 @@ internal class BluetoothDiscoverViewModel @Inject constructor(
     }.stateIn(viewModelScope, SharingStarted.Eagerly, BluetoothDiscoverDataStore())
 
     init {
-        launchObservers()
-    }
-
-    private fun launchObservers() {
         bluetoothController.registerBluetoothStateReceiver()
     }
 

@@ -28,6 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -65,12 +66,16 @@ internal fun BluetoothDiscoverStateful(
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val permissions = remember { getPermissions(context) }
+    val arePermissionsGranted = remember {
+        mutableStateOf(permissions.all { it.value })
+    }
 
     val bluetoothPermissionsLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results ->
             results.entries.forEach {
                 permissions.replace(it.key, it.value)
             }
+            arePermissionsGranted.value = permissions.all { it.value }
         }
     val enableBluetoothLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
@@ -81,7 +86,7 @@ internal fun BluetoothDiscoverStateful(
     }
 
     BluetoothDiscoverScreen(
-        permissions = permissions,
+        arePermissionsGranted = arePermissionsGranted.value,
         isBluetoothEnable = state.value.isBluetoothEnabled,
         isScanning = state.value.isScanning,
         discoveredDevices = state.value.scannedDevices,
@@ -129,7 +134,7 @@ internal fun BluetoothDiscoverStateful(
 
 @Composable
 private fun BluetoothDiscoverScreen(
-    permissions: MutableMap<String, Boolean>,
+    arePermissionsGranted: Boolean,
     isBluetoothEnable: Boolean,
     isScanning: Boolean,
     discoveredDevices: List<BluetoothDevice>,
@@ -159,13 +164,14 @@ private fun BluetoothDiscoverScreen(
                 )
         )
         when {
-            permissions.any { !it.value } -> Box(
+            !arePermissionsGranted -> Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddings),
                 contentAlignment = Alignment.Center
             ) {
                 AskScreen(
+                    modifier = Modifier.padding(16.dp),
                     text = stringResource(id = R.string.ask_bluetooth_access),
                     textButton = stringResource(
                         id = R.string.ask_authorize
@@ -182,6 +188,7 @@ private fun BluetoothDiscoverScreen(
                 contentAlignment = Alignment.Center
             ) {
                 AskScreen(
+                    modifier = Modifier.padding(16.dp),
                     text = stringResource(id = R.string.ask_bluetooth_activation),
                     textButton = stringResource(
                         id = R.string.ask_activation
