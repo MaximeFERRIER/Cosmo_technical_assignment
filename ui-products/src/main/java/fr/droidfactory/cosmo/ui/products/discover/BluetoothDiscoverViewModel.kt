@@ -61,7 +61,11 @@ internal class BluetoothDiscoverViewModel @Inject constructor(
 
     internal fun pairDevice(device: BluetoothDevice) {
         viewModelScope.launch {
-            bluetoothController.pairDevice(device)
+            bluetoothController.pairDevice(device).onSuccess {
+                _sideEffect.send(null)
+            }.onFailure {
+                _sideEffect.send(it)
+            }
         }
     }
 

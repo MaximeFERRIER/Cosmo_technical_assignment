@@ -12,6 +12,7 @@ import android.os.Build
 import androidx.core.app.ActivityCompat
 import fr.droidfactory.cosmo.sdk.bluetooth.receivers.NewDeviceFoundReceiver
 import fr.droidfactory.cosmo.sdk.bluetooth.receivers.StateReceiver
+import fr.droidfactory.cosmo.sdk.core.models.CosmoExceptions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -60,7 +61,7 @@ internal class BluetoothControllerImpl @Inject constructor(
 
     @SuppressLint("MissingPermission")
     override fun stopDiscovery() {
-        if (!hasPermissions() || bluetoothAdapter?.isDiscovering == false) return
+        if (!hasPermissions()) return
         bluetoothAdapter?.cancelDiscovery()
         _isScanning.update { false }
     }
@@ -91,9 +92,10 @@ internal class BluetoothControllerImpl @Inject constructor(
 
 
     @SuppressLint("MissingPermission")
-    override fun pairDevice(device: BluetoothDevice) {
-        if (!hasPermissions()) return
+    override fun pairDevice(device: BluetoothDevice): Result<Unit> {
+        if (!hasPermissions()) return Result.failure(CosmoExceptions.MissingPermissionsException)
 
+        stopDiscovery()
         val newDevice = bluetoothAdapter.getRemoteDevice(device.address)
 
         if (newDevice.bondState == BluetoothDevice.BOND_NONE) {
@@ -105,8 +107,11 @@ internal class BluetoothControllerImpl @Inject constructor(
                 _scannedDevices.update {
                     it - newDevice
                 }
+                return Result.success(Unit)
             }
+            return Result.failure(CosmoExceptions.FailedPairDeviceException)
         }
+        return Result.failure(CosmoExceptions.AlreadydPairDeviceException)
     }
 
     override fun release() {

@@ -24,6 +24,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -131,7 +132,8 @@ private fun SingleColumnView(product: Product, paddings: PaddingValues) {
                 AsyncImage(
                     modifier = Modifier.fillMaxSize(),
                     model = product.model.getIllustration(),
-                    contentDescription = ""
+                    contentDescription = "",
+                    contentScale = ContentScale.Crop
                 )
             }
         }

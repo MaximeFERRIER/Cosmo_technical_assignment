@@ -32,9 +32,12 @@ import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -42,6 +45,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
@@ -54,11 +58,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.flowWithLifecycle
 import fr.droidfactory.cosmo.sdk.core.models.CosmoExceptions
 import fr.droidfactory.cosmo.sdk.core.ui.LocalWindowSizeProvider
 import fr.droidfactory.cosmo.sdk.designsystem.components.DsBluetoothCard
 import fr.droidfactory.cosmo.sdk.designsystem.components.DsButton
+import fr.droidfactory.cosmo.sdk.designsystem.components.DsSnackbars
 import fr.droidfactory.cosmo.sdk.designsystem.components.DsTexts
 import fr.droidfactory.cosmo.sdk.designsystem.components.DsTopBar
 import fr.droidfactory.cosmo.ui.products.R
@@ -68,6 +74,7 @@ import fr.droidfactory.cosmo.ui.products.getPermissions
 import fr.droidfactory.cosmo.ui.products.getTypeName
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 private typealias BluetoothDiscoverActioner = (BluetoothDiscoverActions) -> Unit
 
@@ -77,7 +84,10 @@ internal fun BluetoothDiscoverStateful(
     onNavigationBack: () -> Unit
 ) {
     val context = LocalContext.current
-    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    val lifecycle = LocalLifecycleOwner.current
+    val scope = rememberCoroutineScope()
+    val errorSnackbarHostState = remember { SnackbarHostState() }
+    val successSnackbarHostState = remember { SnackbarHostState() }
     val permissions = remember { getPermissions(context) }
     val arePermissionsGranted = remember {
         mutableStateOf(permissions.all { it.value })
@@ -95,7 +105,7 @@ internal fun BluetoothDiscoverStateful(
 
     val state = viewModel.state.collectAsState()
     val sideEffect = remember {
-        viewModel.sideEffect.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED)
+        viewModel.sideEffect.flowWithLifecycle(lifecycle.lifecycle, Lifecycle.State.RESUMED)
     }
 
     BluetoothDiscoverScreen(
@@ -104,7 +114,9 @@ internal fun BluetoothDiscoverStateful(
         isScanning = state.value.isScanning,
         discoveredDevices = state.value.scannedDevices,
         pairedDevices = state.value.pairedDevices,
-        pairingDevice = state.value.pairingDevice
+        pairingDevice = state.value.pairingDevice,
+        errorSnackbarHostState = errorSnackbarHostState,
+        successSnackbarHostState = successSnackbarHostState
     ) { action ->
         when (action) {
             BluetoothDiscoverActions.OnAskForPermissionClicked -> bluetoothPermissionsLauncher.launch(
@@ -135,13 +147,35 @@ internal fun BluetoothDiscoverStateful(
     }
 
     LaunchedEffect(key1 = sideEffect) {
-        sideEffect.onEach {
-            when (it) {
-                null -> {}
-                is CosmoExceptions.MissingPermissionsException -> {}
-                is CosmoExceptions.FailedPairDeviceException -> {}
+        sideEffect.onEach { error ->
+            val snackbarText = when (error) {
+                null -> R.string.success_pair_device
+                is CosmoExceptions.MissingPermissionsException -> R.string.error_missing_permission
+                is CosmoExceptions.FailedPairDeviceException -> R.string.error_failed_pair_device
+                is CosmoExceptions.AlreadydPairDeviceException -> R.string.error_device_already_paired
+                else -> R.string.error_title
+            }
+            scope.launch {
+                if (error == null) {
+                    successSnackbarHostState.showSnackbar(message = context.getString(snackbarText))
+                } else {
+                    errorSnackbarHostState.showSnackbar(message = context.getString(snackbarText))
+                }
             }
         }.launchIn(this)
+    }
+
+    DisposableEffect(lifecycle) {
+        val observer = LifecycleEventObserver { _, event ->
+            if(event == Lifecycle.Event.ON_PAUSE) {
+                viewModel.stopDiscovery()
+            }
+        }
+        lifecycle.lifecycle.addObserver(observer)
+        onDispose {
+            viewModel.stopDiscovery()
+            lifecycle.lifecycle.removeObserver(observer)
+        }
     }
 }
 
@@ -153,7 +187,9 @@ private fun BluetoothDiscoverScreen(
     discoveredDevices: List<BluetoothDevice>,
     pairedDevices: List<BluetoothDevice>,
     pairingDevice: BluetoothDevice?,
-    actioner: BluetoothDiscoverActioner
+    errorSnackbarHostState: SnackbarHostState,
+    successSnackbarHostState: SnackbarHostState,
+    actioner: BluetoothDiscoverActioner,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -162,17 +198,37 @@ private fun BluetoothDiscoverScreen(
                 actioner(BluetoothDiscoverActions.OnBackClicked)
             }
         }, bottomBar = {
-            val buttonText = if (isScanning) {
-                R.string.stop_scanning
-            } else {
-                R.string.start_scanning
+            if (arePermissionsGranted && isBluetoothEnable) {
+                val buttonText = if (isScanning) {
+                    R.string.stop_scanning
+                } else {
+                    R.string.start_scanning
+                }
+                DsButton.PrimaryButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp), text = stringResource(id = buttonText)
+                ) {
+                    actioner(BluetoothDiscoverActions.OnToggleDevicesDiscovery)
+                }
             }
-            DsButton.PrimaryButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp), text = stringResource(id = buttonText)
-            ) {
-                actioner(BluetoothDiscoverActions.OnToggleDevicesDiscovery)
+        }, snackbarHost = {
+            SnackbarHost(hostState = errorSnackbarHostState) {
+                DsSnackbars.SnackbarError(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    message = it.visuals.message
+                )
+            }
+
+            SnackbarHost(hostState = successSnackbarHostState) {
+                DsSnackbars.SnackbarSuccess(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    message = it.visuals.message
+                )
             }
         }
     ) { paddings ->
@@ -332,7 +388,7 @@ private fun DeviceList(
     pairingDevice: BluetoothDevice?,
     actioner: BluetoothDiscoverActioner
 ) {
-    val nbColumns = LocalWindowSizeProvider.current.getNbColumns()
+    val nbColumns = LocalWindowSizeProvider.current.getNbColumns() * 2
     LazyVerticalGrid(modifier = Modifier.fillMaxWidth(), columns = GridCells.Fixed(nbColumns)) {
         items(items = devices, key = {
             "${it.address}_$nbColumns"

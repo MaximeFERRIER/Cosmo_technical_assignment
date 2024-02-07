@@ -10,5 +10,6 @@ sealed class CosmoExceptions: Exception() {
 
     data object MissingPermissionsException: CosmoExceptions()
     data object FailedPairDeviceException: CosmoExceptions()
+    data object AlreadydPairDeviceException: CosmoExceptions()
 
 }

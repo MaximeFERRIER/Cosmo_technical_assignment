@@ -13,7 +13,7 @@ interface BluetoothController {
     fun registerBluetoothStateReceiver()
     fun startDiscovery()
     fun stopDiscovery()
-    fun pairDevice(device: BluetoothDevice)
+    fun pairDevice(device: BluetoothDevice): Result<Unit>
     fun release()
 
 }

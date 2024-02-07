@@ -32,14 +32,15 @@ object DsTexts {
         modifier: Modifier = Modifier,
         title: String,
         align: TextAlign = TextAlign.Start,
-        color: Color = MaterialTheme.colorScheme.onBackground
+        color: Color = MaterialTheme.colorScheme.onBackground,
+        maxLines: Int = 1
     ) = DsTextsImpl(
         modifier = modifier,
         text = title,
         color = color,
         style = MaterialTheme.typography.titleMedium,
         align = align,
-        maxLines = 1
+        maxLines = maxLines
     )
 
     @Composable
@@ -113,14 +114,15 @@ object DsTexts {
         modifier: Modifier = Modifier,
         title: String,
         color: Color = MaterialTheme.colorScheme.onBackground,
-        align: TextAlign = TextAlign.Start
+        align: TextAlign = TextAlign.Start,
+        maxLines: Int = 1
     ) = DsTextsImpl(
         modifier = modifier,
         text = title,
         color = color,
         style = MaterialTheme.typography.headlineSmall,
         align = align,
-        maxLines = 1
+        maxLines = maxLines
     )
 
     @Composable

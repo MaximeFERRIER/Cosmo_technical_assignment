@@ -17,6 +17,17 @@ object DsSnackbars {
         containerColor = MaterialTheme.colorScheme.error,
         contentColor = MaterialTheme.colorScheme.onError
     )
+
+    @Composable
+    fun SnackbarSuccess(
+        modifier: Modifier = Modifier,
+        message: String
+    ) = SnackbarImpl(
+        modifier = modifier,
+        message = message,
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+    )
 }
 
 @Composable
