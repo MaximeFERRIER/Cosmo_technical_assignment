@@ -1,4 +1,4 @@
-package fr.droidfactory.cosmo.sdk.core
+package fr.droidfactory.cosmo.sdk.core.models
 
 sealed class CosmoExceptions: Exception() {
     data object NoNetworkException: CosmoExceptions()
@@ -7,5 +7,8 @@ sealed class CosmoExceptions: Exception() {
     data object NoDataFound: CosmoExceptions() {
         private fun readResolve(): Any = NoDataFound
     }
+
+    data object MissingPermissionsException: CosmoExceptions()
+    data object FailedPairDeviceException: CosmoExceptions()
 
 }

@@ -1,6 +1,7 @@
 package fr.droidfactory.cosmo.sdk.bluetooth.controller
 
 import android.bluetooth.BluetoothDevice
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 interface BluetoothController {
@@ -12,6 +13,7 @@ interface BluetoothController {
     fun registerBluetoothStateReceiver()
     fun startDiscovery()
     fun stopDiscovery()
+    fun pairDevice(device: BluetoothDevice)
     fun release()
 
 }

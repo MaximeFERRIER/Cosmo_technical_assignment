@@ -35,4 +35,7 @@
     <string name="device_mix">Device mix BR/EDR and BLE</string>
     <string name="device_unknow">Unknow device</string>
 
+    <string name="tab_bounded">Bounded</string>
+    <string name="tab_discover">Discover</string>
+
 </resources>

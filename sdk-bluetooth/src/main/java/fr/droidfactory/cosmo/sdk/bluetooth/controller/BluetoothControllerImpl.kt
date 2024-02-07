@@ -49,25 +49,64 @@ internal class BluetoothControllerImpl @Inject constructor(
 
     @SuppressLint("MissingPermission")
     override fun startDiscovery() {
-        if (!hasPermissions(context)) return
+        if (!hasPermissions() || bluetoothAdapter?.isDiscovering == true) return
         context.registerReceiver(newDeviceFoundReceiver, IntentFilter(BluetoothDevice.ACTION_FOUND))
         bluetoothAdapter?.startDiscovery()
         _isScanning.update { true }
+        _pairedDevices.update {
+            bluetoothAdapter?.bondedDevices?.map { it } ?: emptyList()
+        }
     }
 
     @SuppressLint("MissingPermission")
     override fun stopDiscovery() {
-        if (!hasPermissions(context)) return
-        bluetoothAdapter?.bondedDevices
+        if (!hasPermissions() || bluetoothAdapter?.isDiscovering == false) return
         bluetoothAdapter?.cancelDiscovery()
         _isScanning.update { false }
     }
 
-    private fun hasPermissions(context: Context): Boolean {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-            return false
+    private fun hasPermissions(): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.BLUETOOTH_SCAN
+                ) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return false
+            }
         }
-        return ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_ADMIN) == PackageManager.PERMISSION_GRANTED
+
+        return ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.BLUETOOTH_ADMIN
+        ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+
+    @SuppressLint("MissingPermission")
+    override fun pairDevice(device: BluetoothDevice) {
+        if (!hasPermissions()) return
+
+        val newDevice = bluetoothAdapter.getRemoteDevice(device.address)
+
+        if (newDevice.bondState == BluetoothDevice.BOND_NONE) {
+            if (newDevice.createBond()) {
+                _pairedDevices.update { devices ->
+                    if(newDevice in devices) devices else devices + newDevice
+                }
+
+                _scannedDevices.update {
+                    it - newDevice
+                }
+            }
+        }
     }
 
     override fun release() {
@@ -75,6 +114,7 @@ internal class BluetoothControllerImpl @Inject constructor(
             stopDiscovery()
             context.unregisterReceiver(stateReceiver)
             context.unregisterReceiver(newDeviceFoundReceiver)
-        } catch (_: Exception) { }
+        } catch (_: Exception) {
+        }
     }
 }

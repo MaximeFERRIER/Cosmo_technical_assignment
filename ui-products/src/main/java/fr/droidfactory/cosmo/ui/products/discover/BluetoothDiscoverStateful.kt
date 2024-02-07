@@ -8,6 +8,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,24 +21,39 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import fr.droidfactory.cosmo.sdk.core.models.CosmoExceptions
 import fr.droidfactory.cosmo.sdk.core.ui.LocalWindowSizeProvider
 import fr.droidfactory.cosmo.sdk.designsystem.components.DsBluetoothCard
+import fr.droidfactory.cosmo.sdk.designsystem.components.DsTexts
 import fr.droidfactory.cosmo.sdk.designsystem.components.DsTopBar
 import fr.droidfactory.cosmo.ui.products.R
 import fr.droidfactory.cosmo.ui.products.discover.components.AskScreen
+import fr.droidfactory.cosmo.ui.products.getIcon
 import fr.droidfactory.cosmo.ui.products.getPermissions
 import fr.droidfactory.cosmo.ui.products.getTypeName
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 private typealias BluetoothDiscoverActioner = (BluetoothDiscoverActions) -> Unit
 
@@ -47,6 +63,7 @@ internal fun BluetoothDiscoverStateful(
     onNavigationBack: () -> Unit
 ) {
     val context = LocalContext.current
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
     val permissions = remember { getPermissions(context) }
 
     val bluetoothPermissionsLauncher =
@@ -59,12 +76,17 @@ internal fun BluetoothDiscoverStateful(
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
 
     val state = viewModel.state.collectAsState()
+    val sideEffect = remember {
+        viewModel.sideEffect.flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED)
+    }
 
     BluetoothDiscoverScreen(
         permissions = permissions,
         isBluetoothEnable = state.value.isBluetoothEnabled,
         isScanning = state.value.isScanning,
-        discoveredDevices = state.value.scannedDevices
+        discoveredDevices = state.value.scannedDevices,
+        pairedDevices = state.value.pairedDevices,
+        pairingDevice = state.value.pairingDevice
     ) { action ->
         when (action) {
             BluetoothDiscoverActions.OnAskForPermissionClicked -> bluetoothPermissionsLauncher.launch(
@@ -87,9 +109,22 @@ internal fun BluetoothDiscoverStateful(
                     viewModel.startDiscovery()
                 }
             }
+
+            is BluetoothDiscoverActions.OnBoundDevice -> {
+                viewModel.pairDevice(action.device)
+            }
         }
     }
 
+    LaunchedEffect(key1 = sideEffect) {
+        sideEffect.onEach {
+            when (it) {
+                null -> {}
+                is CosmoExceptions.MissingPermissionsException -> {}
+                is CosmoExceptions.FailedPairDeviceException -> {}
+            }
+        }.launchIn(this)
+    }
 }
 
 @Composable
@@ -98,6 +133,8 @@ private fun BluetoothDiscoverScreen(
     isBluetoothEnable: Boolean,
     isScanning: Boolean,
     discoveredDevices: List<BluetoothDevice>,
+    pairedDevices: List<BluetoothDevice>,
+    pairingDevice: BluetoothDevice?,
     actioner: BluetoothDiscoverActioner
 ) {
     Scaffold(
@@ -158,6 +195,8 @@ private fun BluetoothDiscoverScreen(
                 paddings = paddings,
                 isScanning = isScanning,
                 discoveredDevices = discoveredDevices,
+                pairedDevices = pairedDevices,
+                pairingDevice = pairingDevice,
                 actioner = actioner
             )
         }
@@ -170,27 +209,83 @@ private fun DiscoveryScreen(
     paddings: PaddingValues,
     isScanning: Boolean,
     discoveredDevices: List<BluetoothDevice>,
+    pairedDevices: List<BluetoothDevice>,
+    pairingDevice: BluetoothDevice?,
     actioner: BluetoothDiscoverActioner
 ) {
-    val nbColumns = LocalWindowSizeProvider.current.getNbColumns()
-    if(!isScanning && discoveredDevices.isEmpty()) {
+    if (!isScanning && discoveredDevices.isEmpty()) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             IconButton(
-                modifier = Modifier.background(color = MaterialTheme.colorScheme.onPrimary, shape = CircleShape),
+                modifier = Modifier.background(
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    shape = CircleShape
+                ),
                 onClick = { actioner(BluetoothDiscoverActions.OnToggleDevicesDiscovery) }) {
-                Icon(painter = painterResource(id = fr.droidfactory.cosmo.sdk.designsystem.R.drawable.bluetooth), contentDescription = "")
+                Icon(
+                    painter = painterResource(id = fr.droidfactory.cosmo.sdk.designsystem.R.drawable.bluetooth),
+                    contentDescription = ""
+                )
             }
         }
     } else {
-        LazyVerticalGrid(modifier = Modifier.padding(paddings), columns = GridCells.Fixed(nbColumns)) {
-            items(items = discoveredDevices, key = {
-                "${it.address}_$nbColumns"
-            }) {
-                DsBluetoothCard(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp), deviceName = it.name, address = it.address, it.type.getTypeName()) {
-
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(paddings)
+        ) {
+            var tabIndex by rememberSaveable { mutableIntStateOf(0) }
+            TabRow(modifier = Modifier, selectedTabIndex = tabIndex) {
+                listOf(
+                    stringResource(id = R.string.tab_discover),
+                    stringResource(id = R.string.tab_bounded)
+                ).forEachIndexed { index, tabName ->
+                    Tab(
+                        selected = tabIndex == index,
+                        onClick = { tabIndex = index },
+                        text = { DsTexts.BodyMedium(title = tabName) })
                 }
+            }
+            when (tabIndex) {
+                0 -> DeviceList(
+                    devices = discoveredDevices,
+                    pairingDevice = pairingDevice,
+                    actioner = actioner
+                )
+
+                1 -> DeviceList(
+                    devices = pairedDevices,
+                    pairingDevice = null,
+                    actioner = actioner
+                )
+            }
+        }
+
+    }
+}
+
+@SuppressLint("MissingPermission")
+@Composable
+private fun DeviceList(
+    devices: List<BluetoothDevice>,
+    pairingDevice: BluetoothDevice?,
+    actioner: BluetoothDiscoverActioner
+) {
+    val nbColumns = LocalWindowSizeProvider.current.getNbColumns()
+    LazyVerticalGrid(modifier = Modifier.fillMaxWidth(), columns = GridCells.Fixed(nbColumns)) {
+        items(items = devices, key = {
+            "${it.address}_$nbColumns"
+        }) {
+            DsBluetoothCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                isPairing = it.address == pairingDevice?.address,
+                deviceName = it.name,
+                address = it.address,
+                typeName = it.type.getTypeName(),
+                deviceType = it.bluetoothClass.majorDeviceClass.getIcon()
+            ) {
+                actioner(BluetoothDiscoverActions.OnBoundDevice(it))
             }
         }
     }

@@ -1,15 +1,24 @@
 package fr.droidfactory.cosmo.ui.products
 
 import android.Manifest
+import android.bluetooth.BluetoothClass
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Computer
+import androidx.compose.material.icons.filled.Healing
+import androidx.compose.material.icons.filled.NetworkCheck
+import androidx.compose.material.icons.filled.PhoneAndroid
+import androidx.compose.material.icons.filled.QuestionMark
+import androidx.compose.material.icons.filled.Toys
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import fr.droidfactory.cosmo.sdk.core.CosmoExceptions
+import fr.droidfactory.cosmo.sdk.core.models.CosmoExceptions
 import fr.droidfactory.cosmo.sdk.core.models.Product
 import fr.droidfactory.cosmo.sdk.designsystem.components.DsLightItem
 
@@ -84,6 +93,7 @@ internal fun getPermissions(context: Context): MutableMap<String, Boolean> {
     }*/
 
     permissions[Manifest.permission.BLUETOOTH_ADMIN] = context.checkSelfPermission(Manifest.permission.BLUETOOTH_ADMIN) == PackageManager.PERMISSION_GRANTED
+    permissions[Manifest.permission.ACCESS_FINE_LOCATION] = context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
     return permissions
 }
 
@@ -94,5 +104,17 @@ internal fun Int.getTypeName(): String {
         2 -> stringResource(id = R.string.device_ble)
         3 -> stringResource(id = R.string.device_mix)
         else -> stringResource(id = R.string.device_unknow)
+    }
+}
+
+@Composable
+    internal fun Int.getIcon(): ImageVector {
+    return when(this) {
+        BluetoothClass.Device.Major.COMPUTER -> Icons.Default.Computer
+        BluetoothClass.Device.Major.PHONE -> Icons.Default.PhoneAndroid
+        BluetoothClass.Device.Major.NETWORKING -> Icons.Default.NetworkCheck
+        BluetoothClass.Device.Major.HEALTH -> Icons.Default.Healing
+        BluetoothClass.Device.Major.TOY -> Icons.Default.Toys
+        else -> Icons.Default.QuestionMark
     }
 }

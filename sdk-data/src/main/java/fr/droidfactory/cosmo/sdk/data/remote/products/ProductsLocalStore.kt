@@ -1,6 +1,6 @@
 package fr.droidfactory.cosmo.sdk.data.remote.products
 
-import fr.droidfactory.cosmo.sdk.core.CosmoExceptions
+import fr.droidfactory.cosmo.sdk.core.models.CosmoExceptions
 import fr.droidfactory.cosmo.sdk.core.models.Product
 import fr.droidfactory.cosmo.sdk.data.database.daos.ProductsDao
 import fr.droidfactory.cosmo.sdk.data.mappers.toDomain
@@ -23,7 +23,8 @@ internal class ProductsLocalStoreImpl @Inject constructor(
 
     override suspend fun getProducts(): List<Product> = productsDao.getAllProducts().toDomain()
     override suspend fun getProductByMacAddress(macAddress: String): Result<Product> {
-        val productEntity = productsDao.getProductByMacAddress(macAddress) ?: return Result.failure(CosmoExceptions.NoDataFound)
+        val productEntity = productsDao.getProductByMacAddress(macAddress) ?: return Result.failure(
+            CosmoExceptions.NoDataFound)
         return Result.success(productEntity.toDomain())
     }
 }

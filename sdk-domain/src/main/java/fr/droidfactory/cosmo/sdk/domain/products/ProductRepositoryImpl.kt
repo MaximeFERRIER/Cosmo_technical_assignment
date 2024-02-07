@@ -1,6 +1,6 @@
 package fr.droidfactory.cosmo.sdk.domain.products
 
-import fr.droidfactory.cosmo.sdk.core.CosmoExceptions
+import fr.droidfactory.cosmo.sdk.core.models.CosmoExceptions
 import fr.droidfactory.cosmo.sdk.core.models.DataSource
 import fr.droidfactory.cosmo.sdk.core.models.Product
 import fr.droidfactory.cosmo.sdk.data.remote.products.ProductsDataStore

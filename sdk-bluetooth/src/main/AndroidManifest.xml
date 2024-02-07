@@ -9,7 +9,10 @@
         tools:targetApi="s" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <uses-feature android:name="android.hardware.bluetooth" />
     <uses-feature android:name="android.hardware.bluetooth_le" />
+    <uses-feature android:name="android.software.companion_device_setup"/>
 
 </manifest>

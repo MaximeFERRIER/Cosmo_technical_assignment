@@ -1,6 +1,6 @@
 package fr.droidfactory.cosmo.sdk.data.remote.utils
 
-import fr.droidfactory.cosmo.sdk.core.CosmoExceptions
+import fr.droidfactory.cosmo.sdk.core.models.CosmoExceptions
 import okio.IOException
 import retrofit2.Response
 
