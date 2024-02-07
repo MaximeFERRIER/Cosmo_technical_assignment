@@ -26,7 +26,7 @@ ksp-version = "1.9.0-1.0.13"
 coroutines-core-version = "1.7.3"
 leakcanary-version = "2.10"
 
-mockito-version = "5.9.0"
+mockk-version = "1.13.9"
 
 kotlin-serialization-version = "1.6.2"
 lifecycleRuntimeCompose = "2.7.0"
@@ -56,11 +56,12 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt-
 hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt-version" }
 hilt-compose-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-version" }
 
-mockito = { group = "org.mockito", name = "mockito-core", version.ref = "mockito-version" }
+mockito = { group = "io.mockk", name = "mockk-android", version.ref = "mockk-version" }
 
 kotlin-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines-core-version" }
 kotlin-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines-core-version" }
 kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-serialization-version" }
+kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name= "kotlinx-coroutines-test", version.ref = "coroutines-core-version" }
 
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room-version" }
 room-coroutine = { group = "androidx.room", name = "room-ktx", version.ref = "room-version" }
