@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="bluetooth_permission">android.permission.ACCESS_BACKGROUND_LOCATION</string>
-</resources>

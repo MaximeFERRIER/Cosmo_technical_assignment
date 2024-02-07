@@ -59,7 +59,7 @@ internal fun ProductListStateful(
     onNavigateToBluetoothDiscovery: () -> Unit
 ) {
     val context = LocalContext.current
-    val screenSize = LocalWindowSizeProvider.current.getScreenSize()
+    val nbColumns = LocalWindowSizeProvider.current.getNbColumns()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -84,7 +84,7 @@ internal fun ProductListStateful(
         is ResultState.Success -> ProductListScreen(
             products = (state.value as ResultState.Success<List<Product>>).data,
             snackbarHostState = snackbarHostState,
-            screenSize = screenSize,
+            nbColumns = nbColumns,
             canScanBluetoothDevices = canScanBluetoothDevices
         ) { action ->
             when (action) {
@@ -107,17 +107,11 @@ internal fun ProductListStateful(
 @Composable
 private fun ProductListScreen(
     products: List<Product>,
-    screenSize: WindowSizeProvider.ScreenSize,
+    nbColumns: Int,
     snackbarHostState: SnackbarHostState,
     canScanBluetoothDevices: Boolean,
     actioner: ProductListActioner
 ) {
-
-    val nbColumns = when (screenSize) {
-        WindowSizeProvider.ScreenSize.SMALL -> 1
-        WindowSizeProvider.ScreenSize.MEDIUM -> 2
-        WindowSizeProvider.ScreenSize.LARGE -> 4
-    }
 
     Scaffold(
         modifier = Modifier

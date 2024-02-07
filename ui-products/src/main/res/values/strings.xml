@@ -30,4 +30,9 @@
     <string name="ask_bluetooth_activation">Activate your Bluetooth</string>
     <string name="ask_activation">Activation</string>
 
+    <string name="device_classic">Device classic (BR/EDR)</string>
+    <string name="device_ble">Device BLE only</string>
+    <string name="device_mix">Device mix BR/EDR and BLE</string>
+    <string name="device_unknow">Unknow device</string>
+
 </resources>

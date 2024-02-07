@@ -5,13 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.droidfactory.cosmo.sdk.bluetooth.controller.BluetoothController
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,14 +16,9 @@ internal class BluetoothDiscoverViewModel @Inject constructor(
     private val bluetoothController: BluetoothController
 ) : ViewModel() {
 
-    private var observeBluetoothEnabledJob: Job? = null
-    private var observeScanDiscoveryJob: Job? = null
-    private val _isBluetoothEnabled = MutableStateFlow(false)
-    private val _scannedDevices = MutableStateFlow(emptyList<BluetoothDevice>())
-
     internal val state = combine(
-        _isBluetoothEnabled,
-        _scannedDevices,
+        bluetoothController.isBluetoothEnabled,
+        bluetoothController.scannedDevices,
         bluetoothController.isScanning
     ) { isBluetoothEnabled, scannedDevices, isScanning ->
         BluetoothDiscoverDataStore(
@@ -43,26 +34,6 @@ internal class BluetoothDiscoverViewModel @Inject constructor(
 
     private fun launchObservers() {
         bluetoothController.registerBluetoothStateReceiver()
-        observeBluetoothState()
-        observeScannedDevices()
-    }
-
-    private fun observeBluetoothState() {
-        observeBluetoothEnabledJob?.cancel()
-        observeBluetoothEnabledJob = viewModelScope.launch {
-            bluetoothController.isBluetoothEnabled.collect { isEnable ->
-                _isBluetoothEnabled.update { isEnable }
-            }
-        }
-    }
-
-    private fun observeScannedDevices() {
-        observeScanDiscoveryJob?.cancel()
-        observeScanDiscoveryJob = viewModelScope.launch {
-            bluetoothController.scannedDevices.collect { devices ->
-                _scannedDevices.update { devices }
-            }
-        }
     }
 
     internal fun startDiscovery() {
@@ -78,7 +49,6 @@ internal class BluetoothDiscoverViewModel @Inject constructor(
         viewModelScope.launch {
             bluetoothController.stopDiscovery()
             bluetoothController.release()
-            observeBluetoothEnabledJob?.cancelAndJoin()
         }
     }
 

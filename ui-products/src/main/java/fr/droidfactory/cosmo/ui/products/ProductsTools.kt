@@ -1,10 +1,13 @@
 package fr.droidfactory.cosmo.ui.products
 
+import android.Manifest
 import android.content.Context
-import androidx.annotation.StringRes
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import fr.droidfactory.cosmo.sdk.core.CosmoExceptions
 import fr.droidfactory.cosmo.sdk.core.models.Product
@@ -67,5 +70,29 @@ internal fun Throwable.toErrorMessage(context: Context): String {
         CosmoExceptions.NoNetworkException -> context.getString(R.string.error_offline)
         CosmoExceptions.ServerException -> context.getString(R.string.error_api)
         else -> context.getString(R.string.error_title)
+    }
+}
+
+internal fun getPermissions(context: Context): MutableMap<String, Boolean> {
+    val permissions = mutableMapOf<String, Boolean>()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        permissions[Manifest.permission.BLUETOOTH_CONNECT] = context.checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED
+        permissions[Manifest.permission.BLUETOOTH_SCAN] = context.checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED
+    }
+    /*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+        permissions[Manifest.permission.ACCESS_BACKGROUND_LOCATION] = context.checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
+    }*/
+
+    permissions[Manifest.permission.BLUETOOTH_ADMIN] = context.checkSelfPermission(Manifest.permission.BLUETOOTH_ADMIN) == PackageManager.PERMISSION_GRANTED
+    return permissions
+}
+
+@Composable
+internal fun Int.getTypeName(): String {
+    return when(this) {
+        1 -> stringResource(id = R.string.device_classic)
+        2 -> stringResource(id = R.string.device_ble)
+        3 -> stringResource(id = R.string.device_mix)
+        else -> stringResource(id = R.string.device_unknow)
     }
 }

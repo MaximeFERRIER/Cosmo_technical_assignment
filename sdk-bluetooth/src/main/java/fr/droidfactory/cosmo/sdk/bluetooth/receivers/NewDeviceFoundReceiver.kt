@@ -14,7 +14,7 @@ internal class NewDeviceFoundReceiver (
             val bluetoothDevice = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 intent.getParcelableExtra(
                     BluetoothDevice.EXTRA_DEVICE,
-                    android.bluetooth.BluetoothDevice::class.java
+                    BluetoothDevice::class.java
                 )
             } else {
                 intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)

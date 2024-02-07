@@ -27,6 +27,12 @@ class WindowSizeProvider(private val windowSize: WindowSizeClass) {
         WindowWidthSizeClass.Expanded -> ScreenSize.LARGE
         else -> ScreenSize.SMALL
     }
+
+    fun getNbColumns(): Int = when (windowSize.widthSizeClass) {
+        WindowWidthSizeClass.Medium -> 2
+        WindowWidthSizeClass.Expanded -> 4
+        else -> 1
+    }
 }
 
 @Composable
