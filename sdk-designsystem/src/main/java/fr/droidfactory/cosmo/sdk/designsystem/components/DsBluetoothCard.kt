@@ -23,8 +23,6 @@ fun DsBluetoothCard(
     modifier: Modifier = Modifier,
     isPairing: Boolean,
     deviceName: String?,
-    address: String,
-    typeName: String,
     deviceType: ImageVector,
     onClick: () -> Unit
 ) {

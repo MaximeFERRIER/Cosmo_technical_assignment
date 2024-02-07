@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="ok">Ok</string>
     <string name="loading_products_text">Please wait while your products are loading</string>
     <string name="loading_product_details">Please wait while your product\'s details are loading</string>
     <string name="error_title">Oops, something wrong happened !</string>
@@ -44,5 +45,9 @@
 
     <string name="tab_bounded">Bounded</string>
     <string name="tab_discover">Discover</string>
+
+    <string name="label_type">Type</string>
+    <string name="label_mac_address">Mac address</string>
+    <string name="label_uuid">UUID</string>
 
 </resources>

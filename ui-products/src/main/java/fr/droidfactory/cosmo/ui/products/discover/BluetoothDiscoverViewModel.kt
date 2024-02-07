@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -61,10 +62,13 @@ internal class BluetoothDiscoverViewModel @Inject constructor(
 
     internal fun pairDevice(device: BluetoothDevice) {
         viewModelScope.launch {
+            _pairingDeviceState.update { device }
             bluetoothController.pairDevice(device).onSuccess {
                 _sideEffect.send(null)
+                _pairingDeviceState.update { null }
             }.onFailure {
                 _sideEffect.send(it)
+                _pairingDeviceState.update { null }
             }
         }
     }

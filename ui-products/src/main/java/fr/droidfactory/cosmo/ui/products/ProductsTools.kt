@@ -88,9 +88,6 @@ internal fun getPermissions(context: Context): MutableMap<String, Boolean> {
         permissions[Manifest.permission.BLUETOOTH_CONNECT] = context.checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED
         permissions[Manifest.permission.BLUETOOTH_SCAN] = context.checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED
     }
-    /*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
-        permissions[Manifest.permission.ACCESS_BACKGROUND_LOCATION] = context.checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
-    }*/
 
     permissions[Manifest.permission.BLUETOOTH_ADMIN] = context.checkSelfPermission(Manifest.permission.BLUETOOTH_ADMIN) == PackageManager.PERMISSION_GRANTED
     permissions[Manifest.permission.ACCESS_FINE_LOCATION] = context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED

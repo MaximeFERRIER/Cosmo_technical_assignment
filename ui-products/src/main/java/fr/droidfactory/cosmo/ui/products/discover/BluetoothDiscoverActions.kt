@@ -7,5 +7,6 @@ internal sealed interface BluetoothDiscoverActions {
     data object OnAskForPermissionClicked: BluetoothDiscoverActions
     data object OnAskToTurnOnBluetoothClicked: BluetoothDiscoverActions
     data object OnToggleDevicesDiscovery: BluetoothDiscoverActions
-    data class OnBoundDevice(val device: BluetoothDevice): BluetoothDiscoverActions
+    data class OnDeviceClicked(val device: BluetoothDevice): BluetoothDiscoverActions
+    data object OnCloseDialog: BluetoothDiscoverActions
 }

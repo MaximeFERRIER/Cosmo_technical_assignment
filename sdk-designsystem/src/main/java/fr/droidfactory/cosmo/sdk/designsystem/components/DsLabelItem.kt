@@ -27,7 +27,7 @@ object DsLabelItem {
     ) = LabelItemImpl(
         modifier = modifier,
         title = title,
-        content = { DsTexts.BodyLarge(title = text, maxLines = 1, color = MaterialTheme.colorScheme.secondary) },
+        content = { DsTexts.BodyLarge(title = text, maxLines = 1, color = MaterialTheme.colorScheme.secondary, overflow = TextOverflow.Ellipsis) },
         isFirstItemOfTheList = isFirstItemOfTheList,
         isLastItemOfTheList = isLastItemOfTheList
     )

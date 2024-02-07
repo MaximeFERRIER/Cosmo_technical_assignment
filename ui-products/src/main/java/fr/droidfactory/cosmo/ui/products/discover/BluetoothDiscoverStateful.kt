@@ -6,30 +6,16 @@ import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDownward
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -39,16 +25,15 @@ import androidx.compose.material3.TabRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -69,9 +54,10 @@ import fr.droidfactory.cosmo.sdk.designsystem.components.DsTexts
 import fr.droidfactory.cosmo.sdk.designsystem.components.DsTopBar
 import fr.droidfactory.cosmo.ui.products.R
 import fr.droidfactory.cosmo.ui.products.discover.components.AskScreen
+import fr.droidfactory.cosmo.ui.products.discover.components.DeviceDetails
+import fr.droidfactory.cosmo.ui.products.discover.components.Tuto
 import fr.droidfactory.cosmo.ui.products.getIcon
 import fr.droidfactory.cosmo.ui.products.getPermissions
-import fr.droidfactory.cosmo.ui.products.getTypeName
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -92,6 +78,7 @@ internal fun BluetoothDiscoverStateful(
     val arePermissionsGranted = remember {
         mutableStateOf(permissions.all { it.value })
     }
+    val displayDeviceData = remember { mutableStateOf<BluetoothDevice?>(null) }
 
     val bluetoothPermissionsLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results ->
@@ -116,7 +103,8 @@ internal fun BluetoothDiscoverStateful(
         pairedDevices = state.value.pairedDevices,
         pairingDevice = state.value.pairingDevice,
         errorSnackbarHostState = errorSnackbarHostState,
-        successSnackbarHostState = successSnackbarHostState
+        successSnackbarHostState = successSnackbarHostState,
+        displayDeviceData = displayDeviceData
     ) { action ->
         when (action) {
             BluetoothDiscoverActions.OnAskForPermissionClicked -> bluetoothPermissionsLauncher.launch(
@@ -140,9 +128,15 @@ internal fun BluetoothDiscoverStateful(
                 }
             }
 
-            is BluetoothDiscoverActions.OnBoundDevice -> {
-                viewModel.pairDevice(action.device)
+            is BluetoothDiscoverActions.OnDeviceClicked -> {
+                if(action.device in state.value.pairedDevices) {
+                    displayDeviceData.value = action.device
+                } else {
+                    viewModel.pairDevice(action.device)
+                }
             }
+
+            BluetoothDiscoverActions.OnCloseDialog -> displayDeviceData.value = null
         }
     }
 
@@ -189,6 +183,7 @@ private fun BluetoothDiscoverScreen(
     pairingDevice: BluetoothDevice?,
     errorSnackbarHostState: SnackbarHostState,
     successSnackbarHostState: SnackbarHostState,
+    displayDeviceData: MutableState<BluetoothDevice?>,
     actioner: BluetoothDiscoverActioner,
 ) {
     Scaffold(
@@ -289,6 +284,15 @@ private fun BluetoothDiscoverScreen(
                 actioner = actioner
             )
         }
+
+        displayDeviceData.value?.let {
+            DeviceDetails(
+                device = it,
+                onClose = {
+                    actioner(BluetoothDiscoverActions.OnCloseDialog)
+                }
+            )
+        }
     }
 }
 
@@ -303,48 +307,7 @@ private fun DiscoveryScreen(
     actioner: BluetoothDiscoverActioner
 ) {
     if (!isScanning && discoveredDevices.isEmpty()) {
-        val animatedOffsetY = remember { mutableFloatStateOf(0f) }
-        val infiniteTransition = rememberInfiniteTransition(label = "transition")
-        val offsetAnimator = infiniteTransition.animateFloat(
-            initialValue = -15f,
-            targetValue = 15f,
-            animationSpec = infiniteRepeatable(
-                animation = tween(durationMillis = 1000, easing = LinearEasing),
-                repeatMode = RepeatMode.Reverse
-            ), label = "transition_timer"
-        )
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddings),
-            verticalArrangement = Arrangement.Bottom,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            DsTexts.HeadlineLarge(title = "Start here")
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-
-            Icon(
-                modifier = Modifier
-                    .size(56.dp)
-                    .offset(y = animatedOffsetY.floatValue.dp),
-                imageVector = Icons.Default.ArrowDownward,
-                contentDescription = "",
-                tint = MaterialTheme.colorScheme.onTertiary
-            )
-
-        }
-
-        LaunchedEffect(Unit) {
-            snapshotFlow { offsetAnimator.value }
-                .collect { value ->
-                    animatedOffsetY.floatValue = value
-                }
-        }
-
+        Tuto(paddings = paddings)
     } else {
         Column(
             modifier = Modifier
@@ -399,11 +362,9 @@ private fun DeviceList(
                     .padding(16.dp),
                 isPairing = it.address == pairingDevice?.address,
                 deviceName = it.name,
-                address = it.address,
-                typeName = it.type.getTypeName(),
                 deviceType = it.bluetoothClass.majorDeviceClass.getIcon()
             ) {
-                actioner(BluetoothDiscoverActions.OnBoundDevice(it))
+                actioner(BluetoothDiscoverActions.OnDeviceClicked(it))
             }
         }
     }
