@@ -57,9 +57,11 @@ internal fun BluetoothDiscoverStateful(
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
 
     val state = viewModel.state.collectAsState()
+
     BluetoothDiscoverScreen(
         permissions = permissions,
-        isBluetoothEnable = state.value.isBluetoothEnabled
+        isBluetoothEnable = state.value.isBluetoothEnabled,
+
     ) { action ->
         when (action) {
             BluetoothDiscoverActions.OnAskForPermissionClicked -> bluetoothPermissionsLauncher.launch(
@@ -110,7 +112,9 @@ private fun BluetoothDiscoverScreen(
                     .padding(paddings),
                 contentAlignment = Alignment.Center
             ) {
-                AskScreen(text = "Accorder les permissions", textButton = "Enable") {
+                AskScreen(text = stringResource(id = R.string.ask_bluetooth_access), textButton = stringResource(
+                    id = R.string.ask_authorize
+                )) {
                     actioner(BluetoothDiscoverActions.OnAskForPermissionClicked)
                 }
             }
@@ -121,16 +125,19 @@ private fun BluetoothDiscoverScreen(
                     .padding(paddings),
                 contentAlignment = Alignment.Center
             ) {
-                AskScreen(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddings), text = "Activer bluetooth", textButton = "Activation"
-                ) {
+                AskScreen(text = stringResource(id = R.string.ask_bluetooth_activation), textButton = stringResource(
+                    id = R.string.ask_activation
+                )) {
                     actioner(BluetoothDiscoverActions.OnAskToTurnOnBluetoothClicked)
                 }
             }
 
-            else -> {}
+            else -> DiscoveryScreen()
         }
     }
+}
+
+@Composable
+private fun DiscoveryScreen() {
+
 }

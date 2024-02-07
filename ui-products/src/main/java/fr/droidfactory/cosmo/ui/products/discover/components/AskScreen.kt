@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,6 +32,7 @@ internal fun AskScreen(
         ) {
 
             AsyncImage(
+                modifier = Modifier.size(128.dp),
                 model = fr.droidfactory.cosmo.sdk.designsystem.R.drawable.bluetooth,
                 contentDescription = ""
             )

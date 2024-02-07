@@ -25,5 +25,9 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
+    <string name="ask_bluetooth_access">Bluetooth permission access</string>
+    <string name="ask_authorize">Authorize</string>
+    <string name="ask_bluetooth_activation">Activate your Bluetooth</string>
+    <string name="ask_activation">Activation</string>
 
 </resources>
