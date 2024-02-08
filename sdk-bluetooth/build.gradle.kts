@@ -16,6 +16,8 @@ android {
     kapt {
         correctErrorTypes = true
     }
+
+    testOptions.unitTests.isReturnDefaultValues = true
 }
 
 dependencies {
@@ -27,6 +29,9 @@ dependencies {
     kapt(libs.hilt.compiler)
 
     testImplementation(libs.junit)
+    testImplementation(libs.mockito)
+    testImplementation(libs.core.ktx.test)
+    testImplementation(libs.kotlin.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

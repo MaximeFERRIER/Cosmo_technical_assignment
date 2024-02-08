@@ -24,6 +24,10 @@ android {
         correctErrorTypes = true
     }
 
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
+
 }
 
 dependencies {
@@ -46,6 +50,8 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.hilt.compose.navigation)
     implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.rules)
+    implementation(libs.core.ktx.test)
     kapt(libs.hilt.compiler)
 
     implementation(libs.coil.compose)

@@ -1,8 +1,8 @@
-package fr.droidfactory.cosmo.sdk.data.remote.products
+package fr.droidfactory.cosmo.sdk.data.products
 
 import fr.droidfactory.cosmo.sdk.core.models.Product
 import fr.droidfactory.cosmo.sdk.data.mappers.toDomain
-import fr.droidfactory.cosmo.sdk.data.remote.utils.executeApiCall
+import fr.droidfactory.cosmo.sdk.data.remote.executeApiCall
 import javax.inject.Inject
 
 interface ProductsDataStore {

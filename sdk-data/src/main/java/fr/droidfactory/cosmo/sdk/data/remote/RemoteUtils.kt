@@ -1,4 +1,4 @@
-package fr.droidfactory.cosmo.sdk.data.remote.utils
+package fr.droidfactory.cosmo.sdk.data.remote
 
 import fr.droidfactory.cosmo.sdk.core.models.CosmoExceptions
 import okio.IOException

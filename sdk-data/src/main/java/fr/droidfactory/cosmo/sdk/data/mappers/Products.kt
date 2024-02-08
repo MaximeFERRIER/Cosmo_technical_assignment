@@ -2,7 +2,7 @@ package fr.droidfactory.cosmo.sdk.data.mappers
 
 import fr.droidfactory.cosmo.sdk.core.models.Product
 import fr.droidfactory.cosmo.sdk.data.database.entities.ProductEntity
-import fr.droidfactory.cosmo.sdk.data.remote.products.CosmoProductsResponse
+import fr.droidfactory.cosmo.sdk.data.products.CosmoProductsResponse
 
 internal fun List<ProductEntity>.toDomain(): List<Product> = this.map { it.toDomain() }
 internal fun ProductEntity.toDomain(): Product = with(this) {

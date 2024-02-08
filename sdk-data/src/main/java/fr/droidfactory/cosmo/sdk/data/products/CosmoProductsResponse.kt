@@ -1,4 +1,4 @@
-package fr.droidfactory.cosmo.sdk.data.remote.products
+package fr.droidfactory.cosmo.sdk.data.products
 
 
 import kotlinx.serialization.SerialName

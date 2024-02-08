@@ -18,7 +18,10 @@ import kotlinx.coroutines.withContext
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 
+@RunWith(JUnit4::class)
 class GetProductListInteractorTest {
 
     private val mockDispatcher = Dispatchers.Unconfined
@@ -63,7 +66,7 @@ class GetProductListInteractorTest {
     }
 
     @Test
-    fun `Test execute - success`() = runTest {
+    fun getProductListTest() = runTest {
         val expectedResult = Result.success(DataSource(
             data = mockkProductList,
             source = DataSource.Source.Network
@@ -77,7 +80,7 @@ class GetProductListInteractorTest {
     }
 
     @Test
-    fun `Test execute - failure`() = runTest {
+    fun getProductListFailureTest() = runTest {
         val errorMessage = "Failed to fetch product list"
         val expectedErrorResult = Result.failure<DataSource<List<Product>>>(Throwable(errorMessage))
         coEvery { mockProductRepository.getProductList() } returns Result.failure(Throwable(errorMessage))

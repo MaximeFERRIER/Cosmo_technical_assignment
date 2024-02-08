@@ -1,4 +1,4 @@
-package fr.droidfactory.cosmo.sdk.data.remote.products
+package fr.droidfactory.cosmo.sdk.data.products
 
 import retrofit2.Response
 import retrofit2.http.GET

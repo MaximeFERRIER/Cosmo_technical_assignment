@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-internal class BluetoothControllerImpl @Inject constructor(
+class BluetoothControllerImpl @Inject constructor(
     private val context: Context
 ) : BluetoothController {
 

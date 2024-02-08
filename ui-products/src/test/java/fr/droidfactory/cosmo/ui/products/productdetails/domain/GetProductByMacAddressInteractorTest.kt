@@ -12,7 +12,10 @@ import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 
+@RunWith(JUnit4::class)
 class GetProductByMacAddressInteractorTest {
 
     private val mockDispatcher = Dispatchers.Unconfined
@@ -43,7 +46,7 @@ class GetProductByMacAddressInteractorTest {
     }
 
     @Test
-    fun `Test execute - Success case`() = runTest {
+    fun getProductByMacAddressTest() = runTest {
         val macAddress = "testMacAddress"
         val expectedResult = Result.success(mockProduct)
         coEvery { mockProductRepository.getProductByMacAddress(macAddress) } returns expectedResult
@@ -55,7 +58,7 @@ class GetProductByMacAddressInteractorTest {
     }
 
     @Test
-    fun `Test execute - Failure case`() = runTest {
+    fun getProductByMacAddressFailedTest() = runTest {
         val macAddress = "testMacAddress"
         val errorMessage = "Failed to fetch product by mac address"
         val expectedErrorResult = Result.failure<Product>(Throwable(errorMessage))

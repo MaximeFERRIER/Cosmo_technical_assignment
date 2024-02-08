@@ -1,6 +1,5 @@
 package fr.droidfactory.cosmo.sdk.domain
 
-import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -8,7 +7,6 @@ import io.mockk.unmockkAll
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.After
-import org.junit.Before
 import org.junit.Test
 
 
@@ -31,18 +29,13 @@ class InteractorTest {
         }
     }
 
-    @Before
-    fun setUp() {
-        MockKAnnotations.init(this)
-    }
-
     @After
     fun tearDown() {
         unmockkAll()
     }
 
     @Test
-    fun `Test Interactor`() = runTest {
+    fun interactorTest() = runTest {
         val interactor = mockk<TestInteractor>()
         coEvery { interactor.invoke() } returns mockedResultWithoutParams
 
@@ -52,7 +45,7 @@ class InteractorTest {
     }
 
     @Test
-    fun `Test InteractorWithParams`() = runTest {
+    fun interactorWithParamsTest() = runTest {
         val interactor = mockk<TestInteractorWithParams>()
         coEvery { interactor.invoke(123) } returns mockedResultWithParams
 

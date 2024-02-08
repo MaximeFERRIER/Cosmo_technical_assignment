@@ -33,7 +33,7 @@ internal class ProductListViewModel @Inject constructor(
     internal fun getProductList() {
         viewModelScope.launch {
             _productsState.update { ResultState.Loading }
-            getProductListInteractor.invoke().onSuccess { products ->
+            getProductListInteractor.execute().onSuccess { products ->
                 _productsState.update { ResultState.Success(products.data) }
 
                 (products.source as? DataSource.Source.Database)?.let {

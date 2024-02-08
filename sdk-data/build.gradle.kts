@@ -13,7 +13,7 @@ android {
     buildFeatures.buildConfig = true
 
     defaultConfig {
-         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
 
         buildConfigField("String", "HOST", project.property("host.cosmo") as String)
@@ -47,6 +47,13 @@ dependencies {
     implementation(libs.kotlin.serialization.json)
 
     testImplementation(libs.junit)
+    testImplementation(libs.androidx.junit)
+    testImplementation(libs.okhttp.mockwebserver)
+    testImplementation(libs.mockito)
+    testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.core.ktx.test)
+    testImplementation(libs.room.test)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

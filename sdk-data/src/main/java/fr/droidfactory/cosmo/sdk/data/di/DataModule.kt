@@ -13,11 +13,11 @@ import fr.droidfactory.cosmo.sdk.data.BuildConfig
 import fr.droidfactory.cosmo.sdk.data.database.CosmoDatabase
 import fr.droidfactory.cosmo.sdk.data.database.daos.ProductsDao
 import fr.droidfactory.cosmo.sdk.data.database.migrations.Migration1To2
-import fr.droidfactory.cosmo.sdk.data.remote.products.ProductsDataStore
-import fr.droidfactory.cosmo.sdk.data.remote.products.ProductsDataStoreImpl
-import fr.droidfactory.cosmo.sdk.data.remote.products.ProductsLocalStore
-import fr.droidfactory.cosmo.sdk.data.remote.products.ProductsLocalStoreImpl
-import fr.droidfactory.cosmo.sdk.data.remote.products.ProductsService
+import fr.droidfactory.cosmo.sdk.data.products.ProductsDataStore
+import fr.droidfactory.cosmo.sdk.data.products.ProductsDataStoreImpl
+import fr.droidfactory.cosmo.sdk.data.products.ProductsLocalStore
+import fr.droidfactory.cosmo.sdk.data.products.ProductsLocalStoreImpl
+import fr.droidfactory.cosmo.sdk.data.products.ProductsService
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient

@@ -3,8 +3,8 @@ package fr.droidfactory.cosmo.sdk.domain.products
 import fr.droidfactory.cosmo.sdk.core.models.CosmoExceptions
 import fr.droidfactory.cosmo.sdk.core.models.DataSource
 import fr.droidfactory.cosmo.sdk.core.models.Product
-import fr.droidfactory.cosmo.sdk.data.remote.products.ProductsDataStore
-import fr.droidfactory.cosmo.sdk.data.remote.products.ProductsLocalStore
+import fr.droidfactory.cosmo.sdk.data.products.ProductsDataStore
+import fr.droidfactory.cosmo.sdk.data.products.ProductsLocalStore
 import javax.inject.Inject
 
 internal class ProductRepositoryImpl @Inject constructor(
