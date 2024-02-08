@@ -17,7 +17,7 @@
     <string name="error_failed_pair_device">Failed to pair the device</string>
     <string name="error_device_already_paired">Device already paired</string>
 
-    <string name="success_pair_device">Device paired with success !</string>
+    <string name="success_pair_device">A pairing request is coming !</string>
 
     <string name="model">Model</string>
     <string name="product">Product</string>

@@ -11,6 +11,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import fr.droidfactory.cosmo.sdk.bluetooth.receivers.NewDeviceFoundReceiver
+import fr.droidfactory.cosmo.sdk.bluetooth.receivers.NewDevicePairedReceiver
 import fr.droidfactory.cosmo.sdk.bluetooth.receivers.StateReceiver
 import fr.droidfactory.cosmo.sdk.core.models.CosmoExceptions
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,6 +45,13 @@ class BluetoothControllerImpl @Inject constructor(
         }
     }
 
+    private val newDevicePairedReceiver = NewDevicePairedReceiver { newDevice ->
+        _pairedDevices.update { devices ->
+            if(newDevice in devices) devices else devices + newDevice
+        }
+        _scannedDevices.update { it - newDevice }
+    }
+
     override fun registerBluetoothStateReceiver() {
         context.registerReceiver(stateReceiver, IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
     }
@@ -52,6 +60,7 @@ class BluetoothControllerImpl @Inject constructor(
     override fun startDiscovery() {
         if (!hasPermissions() || bluetoothAdapter?.isDiscovering == true) return
         context.registerReceiver(newDeviceFoundReceiver, IntentFilter(BluetoothDevice.ACTION_FOUND))
+        context.registerReceiver(newDevicePairedReceiver, IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED))
         bluetoothAdapter?.startDiscovery()
         _isScanning.update { true }
         _pairedDevices.update {
@@ -100,13 +109,6 @@ class BluetoothControllerImpl @Inject constructor(
 
         if (newDevice.bondState == BluetoothDevice.BOND_NONE) {
             if (newDevice.createBond()) {
-                _pairedDevices.update { devices ->
-                    if(newDevice in devices) devices else devices + newDevice
-                }
-
-                _scannedDevices.update {
-                    it - newDevice
-                }
                 return Result.success(Unit)
             }
             return Result.failure(CosmoExceptions.FailedPairDeviceException)
@@ -119,6 +121,7 @@ class BluetoothControllerImpl @Inject constructor(
             stopDiscovery()
             context.unregisterReceiver(stateReceiver)
             context.unregisterReceiver(newDeviceFoundReceiver)
+            context.unregisterReceiver(newDevicePairedReceiver)
         } catch (_: Exception) {
         }
     }
