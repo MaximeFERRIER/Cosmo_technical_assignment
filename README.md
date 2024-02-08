@@ -1,6 +1,6 @@
 # Cosmo technical assignment
 
-![Cosmo app](/Users/maxime/Code/Android/Cosmo/screenshots/388shots_so.png)
+![Cosmo app](./screenshots/388shots_so.png)
 
 ## Mandatory
 
@@ -24,6 +24,6 @@
 # Démo
 
 <video width="600" height="450" controls>
-  <source src="screenshots/cosmo.mp4" type="video/mp4">
+  <source src="./screenshots/cosmo.mp4" type="video/mp4">
 </video>
 
