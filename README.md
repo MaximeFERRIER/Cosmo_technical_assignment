@@ -21,3 +21,9 @@
 
   
 
+# Démo
+
+<video width="600" height="450" controls>
+  <source src="screenshots/cosmo.mp4" type="video/mp4">
+</video>
+
