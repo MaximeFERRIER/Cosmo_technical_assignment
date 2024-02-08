@@ -61,7 +61,7 @@ internal fun Tuto(paddings: PaddingValues) {
                 .offset(y = animatedOffsetY.floatValue.dp),
             imageVector = Icons.Default.ArrowDownward,
             contentDescription = "",
-            tint = MaterialTheme.colorScheme.onTertiary
+            tint = MaterialTheme.colorScheme.tertiary
         )
 
     }

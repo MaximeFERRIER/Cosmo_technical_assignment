@@ -52,7 +52,7 @@ private fun TopAppBarImpl(
             containerColor = Color.Transparent
         ),
         title = {
-            Text(text = title, style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onPrimary)
+            Text(text = title, style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onBackground)
         },
         navigationIcon = {
             if (navigationIcon != null && onNavigationClick != null) {
@@ -63,7 +63,7 @@ private fun TopAppBarImpl(
                     Icon(
                         imageVector = navigationIcon,
                         contentDescription = "",
-                        tint = MaterialTheme.colorScheme.onPrimary
+                        tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
             }
@@ -71,7 +71,7 @@ private fun TopAppBarImpl(
         actions = {
             actions.forEach {
                 IconButton(onClick = { it.onClick() }) {
-                    Icon(imageVector = it.icon, contentDescription = "", tint = MaterialTheme.colorScheme.onPrimary)
+                    Icon(imageVector = it.icon, contentDescription = "", tint = MaterialTheme.colorScheme.onBackground)
                 }
             }
         }

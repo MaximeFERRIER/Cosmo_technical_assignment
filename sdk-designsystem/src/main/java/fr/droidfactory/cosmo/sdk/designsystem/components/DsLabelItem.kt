@@ -61,12 +61,12 @@ private fun LabelItemImpl(
     Surface(
         modifier = modifier.fillMaxWidth().height(56.dp),
         shape = RoundedCornerShape(topStart = topBorderShape, topEnd = topBorderShape, bottomStart = bottomBorderShape, bottomEnd = bottomBorderShape),
-        color = MaterialTheme.colorScheme.surface
+        color = MaterialTheme.colorScheme.secondaryContainer
     ) {
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Absolute.SpaceBetween) {
-            DsTexts.BodyLarge(title = title, maxLines = 1, overflow = TextOverflow.Ellipsis, color = MaterialTheme.colorScheme.onSurface)
+            DsTexts.BodyLarge(title = title, maxLines = 1, overflow = TextOverflow.Ellipsis, color = MaterialTheme.colorScheme.onSecondaryContainer)
             Spacer(modifier = Modifier.width(8.dp))
             content()
         }

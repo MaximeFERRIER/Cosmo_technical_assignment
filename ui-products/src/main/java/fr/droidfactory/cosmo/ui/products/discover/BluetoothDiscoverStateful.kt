@@ -36,7 +36,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -129,7 +128,7 @@ internal fun BluetoothDiscoverStateful(
             }
 
             is BluetoothDiscoverActions.OnDeviceClicked -> {
-                if(action.device in state.value.pairedDevices) {
+                if (action.device in state.value.pairedDevices) {
                     displayDeviceData.value = action.device
                 } else {
                     viewModel.pairDevice(action.device)
@@ -161,7 +160,7 @@ internal fun BluetoothDiscoverStateful(
 
     DisposableEffect(lifecycle) {
         val observer = LifecycleEventObserver { _, event ->
-            if(event == Lifecycle.Event.ON_PAUSE) {
+            if (event == Lifecycle.Event.ON_PAUSE) {
                 viewModel.stopDiscovery()
             }
         }
@@ -187,7 +186,9 @@ private fun BluetoothDiscoverScreen(
     actioner: BluetoothDiscoverActioner,
 ) {
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
         topBar = {
             DsTopBar.NavigationTopBar(title = stringResource(id = R.string.discovery_title)) {
                 actioner(BluetoothDiscoverActions.OnBackClicked)
@@ -227,19 +228,6 @@ private fun BluetoothDiscoverScreen(
             }
         }
     ) { paddings ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            MaterialTheme.colorScheme.primary,
-                            MaterialTheme.colorScheme.secondary,
-                            MaterialTheme.colorScheme.tertiary
-                        )
-                    )
-                )
-        )
         when {
             !arePermissionsGranted -> Box(
                 modifier = Modifier

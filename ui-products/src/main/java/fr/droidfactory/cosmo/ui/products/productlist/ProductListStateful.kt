@@ -1,11 +1,7 @@
 package fr.droidfactory.cosmo.ui.products.productlist
 
-import android.Manifest
 import android.content.pm.PackageManager
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -24,19 +20,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import fr.droidfactory.cosmo.sdk.core.models.Product
 import fr.droidfactory.cosmo.sdk.core.ui.LocalWindowSizeProvider
 import fr.droidfactory.cosmo.sdk.core.ui.ResultState
-import fr.droidfactory.cosmo.sdk.core.ui.WindowSizeProvider
 import fr.droidfactory.cosmo.sdk.designsystem.components.DsFab
 import fr.droidfactory.cosmo.sdk.designsystem.components.DsProductItem
 import fr.droidfactory.cosmo.sdk.designsystem.components.DsSnackbars
@@ -63,10 +56,16 @@ internal fun ProductListStateful(
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
-    val canScanBluetoothDevices = context.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH) && context.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)
+    val canScanBluetoothDevices =
+        context.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH) && context.packageManager.hasSystemFeature(
+            PackageManager.FEATURE_BLUETOOTH_LE
+        )
     val state = viewModel.productsState.collectAsState()
     val sideEffect = remember {
-        viewModel.sideEffect.flowWithLifecycle(lifecycle = lifecycle, minActiveState = Lifecycle.State.STARTED)
+        viewModel.sideEffect.flowWithLifecycle(
+            lifecycle = lifecycle,
+            minActiveState = Lifecycle.State.STARTED
+        )
     }
 
     when (state.value) {
@@ -122,8 +121,11 @@ private fun ProductListScreen(
                 title = stringResource(id = R.string.product_title)
             )
         }, floatingActionButton = {
-            if(canScanBluetoothDevices) {
-                DsFab.SecondaryFab(text = stringResource(id = R.string.discovery_title), icon = Icons.AutoMirrored.Default.BluetoothSearching) {
+            if (canScanBluetoothDevices) {
+                DsFab.SecondaryFab(
+                    text = stringResource(id = R.string.discovery_title),
+                    icon = Icons.AutoMirrored.Default.BluetoothSearching
+                ) {
                     actioner(ProductListActions.OnFabClicked)
                 }
             }
@@ -138,28 +140,17 @@ private fun ProductListScreen(
             }
         }
     ) { paddings ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            MaterialTheme.colorScheme.primary,
-                            MaterialTheme.colorScheme.secondary,
-                            MaterialTheme.colorScheme.tertiary
-                        )
-                    )
-                )
-        )
-
         LazyVerticalGrid(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddings),
             columns = GridCells.Fixed(nbColumns)
         ) {
-            items(items = products, key = { "${nbColumns}_${it.macAddress}"}) {
-                DsProductItem(title = it.productCompleteName, picture = it.model.getIllustration()) {
+            items(items = products, key = { "${nbColumns}_${it.macAddress}" }) {
+                DsProductItem(
+                    title = it.productCompleteName,
+                    picture = it.model.getIllustration()
+                ) {
                     actioner(ProductListActions.OnProductClicked(it.macAddress))
                 }
             }

@@ -2,7 +2,6 @@ package fr.droidfactory.cosmo.ui.products.productdetails
 
 import android.content.Context
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -23,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -93,19 +91,6 @@ private fun ProductDetailsScreen(
                 title = product.model.name,
                 onNavigationClick = { onBackClicked() })
         }) { paddings ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            MaterialTheme.colorScheme.primary,
-                            MaterialTheme.colorScheme.secondary,
-                            MaterialTheme.colorScheme.tertiary
-                        )
-                    )
-                )
-        )
         if (isSmallScreen) {
             SingleColumnView(product = product, paddings = paddings)
         } else {
@@ -263,9 +248,8 @@ private fun DisplayItem(
         if (!isLastItemOfTheList && !isSingleInList) {
             Divider(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                color = MaterialTheme.colorScheme.onBackground
+                    .fillMaxWidth(),
+                color = MaterialTheme.colorScheme.onSecondaryContainer
             )
         }
     }
