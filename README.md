@@ -23,7 +23,4 @@
 
 # Démo
 
-<video src="screenshots/cosmo.mp4" controls title="Cosmo Demo"></video>
-
-[url](https://youtu.be/UD3RJ2UaFFc)
-
+[<img src="https://i.ibb.co/pWcbN5F/products.jpg" width="25%">](https://youtu.be/UD3RJ2UaFFc "Cosmo Demo")
