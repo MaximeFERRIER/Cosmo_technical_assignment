@@ -23,6 +23,7 @@
 
 # Démo
 
-https://youtu.be/UD3RJ2UaFFc
+<video src="screenshots/cosmo.mp4" controls title="Cosmo Demo"></video>
 
+[url](https://youtu.be/UD3RJ2UaFFc)
 
